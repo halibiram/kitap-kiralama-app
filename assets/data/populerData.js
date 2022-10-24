@@ -14,7 +14,7 @@ const populerData = [
     selected: false,
   },
   {
-    id: 2,
+    id: 3,
     image: require('../images/sekerportakali.jpg'),
     title: 'Şeker Portakali',
     author: 'Jose Mauro De Vasconcelos',
