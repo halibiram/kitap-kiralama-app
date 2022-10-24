@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useState} from 'react';
 import {
   Text,
   StyleSheet,
@@ -7,6 +7,7 @@ import {
   ImageBackground,
   ScrollView,
   StatusBar,
+  TouchableOpacity,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Feather from 'react-native-vector-icons/Feather';
@@ -16,55 +17,52 @@ import newData from '../assets/data/newData';
 import colors from '../assets/colors/colors';
 import populerData from '../assets/data/populerData';
 import LinearGradient from 'react-native-linear-gradient';
+import {useNavigation} from '@react-navigation/native';
 
-import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
+import {FlatList, TouchableNativeFeedback} from 'react-native-gesture-handler';
 
 Feather.loadFont();
+
 const Home = ({navigation}) => {
   const renderPopulerBookItem = ({item}) => {
     return (
       <TouchableOpacity
-        onPress={() =>
-          navigation.navigate('Details', {
-            item: item,
-          })
-        }>
-        <ImageBackground
-          source={item.image}
-          imageStyle={styles.populerBookItemImageBg}
-          style={[
-            styles.populerBookItemWrapper,
-            {marginLeft: item.id === 1 ? 20 : 0},
-          ]}>
-          <Text numberOfLines={5} style={styles.populerBookItemTitle}>
-            {item.title}
-          </Text>
-          <Text style={styles.populerBookItemAuthor}>{item.author}</Text>
-        </ImageBackground>
-        <View style={styles.populerBookItemWrapper}></View>
+        key={item.id}
+        onPress={() => navigation.navigate('Details', {item: item})}>
+        <View>
+          <ImageBackground
+            source={item.image}
+            imageStyle={styles.populerBookItemImageBg}
+            style={[
+              styles.populerBookItemWrapper,
+              {marginLeft: item.id === 1 ? 20 : 0},
+            ]}>
+            <Text style={styles.populerBookItemTitle}>{item.title}</Text>
+            <Text style={styles.populerBookItemAuthor}>{item.author}</Text>
+          </ImageBackground>
+        </View>
       </TouchableOpacity>
     );
   };
   const renderNewBookItem = ({item}) => {
     return (
       <TouchableOpacity
-        onPress={() =>
-          navigation.navigate('Details', {
-            item: item,
-          })
-        }>
-        <ImageBackground
-          source={item.image}
-          imageStyle={styles.newBookItemImageBg}
-          style={[
-            styles.newBookItemWrapper,
-            {marginLeft: item.id === 4 ? 20 : 0},
-          ]}>
-          <Text numberOfLines={5} style={styles.newBookItemTitle}>
-            {item.title}
-          </Text>
-          <Text style={styles.newBookItemAuthor}>{item.author}</Text>
-        </ImageBackground>
+        key={item.id}
+        onPress={() => navigation.navigate('Details', {item: item})}>
+        <View>
+          <ImageBackground
+            source={item.image}
+            imageStyle={styles.newBookItemImageBg}
+            style={[
+              styles.newBookItemWrapper,
+              {marginLeft: item.id === 4 ? 20 : 0},
+            ]}>
+            <Text numberOfLines={5} style={styles.newBookItemTitle}>
+              {item.title}
+            </Text>
+            <Text style={styles.newBookItemAuthor}>{item.author}</Text>
+          </ImageBackground>
+        </View>
       </TouchableOpacity>
     );
   };
@@ -172,7 +170,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Regular',
   },
   populerBookWrapper: {
-    marginTop: 13,
+    marginTop: 20,
   },
   populerBookTitle: {
     paddingHorizontal: 20,
@@ -196,9 +194,9 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   populerBookItemTitle: {
-    marginTop: 181,
-
-    fontSize: 16,
+    marginTop: 170,
+    fontFamily: 'Poppins-Regular',
+    fontSize: 14,
     color: 'white',
     backgroundColor: '#0D253Ca0',
     paddingHorizontal: 5,
@@ -216,7 +214,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 8,
     borderBottomRightRadius: 8,
   },
-  newBookWrapper: {marginTop: -210},
+  newBookWrapper: {marginTop: 0},
   newBookTitle: {
     paddingHorizontal: 20,
     fontFamily: 'Poppins-Regular',
@@ -234,7 +232,7 @@ const styles = StyleSheet.create({
     height: 180,
   },
   newBookItemTitle: {
-    marginTop: 150,
+    marginTop: 145,
 
     fontSize: 11,
     color: 'white',
