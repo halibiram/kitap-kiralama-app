@@ -107,9 +107,7 @@ function App() {
         <Stack.Screen
           name="Details"
           component={Details}
-          options={{
-            headerShown: false,
-          }}
+          options={{headerShown: false}}
         />
       </Stack.Navigator>
     </NavigationContainer>

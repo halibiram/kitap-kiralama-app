@@ -22,7 +22,7 @@ const Qrcode = () => {
       <TouchableWithoutFeedback onPress={onPress}>
         <View style={styles.button}>
           <Image source={require('../assets/images/sql.jpg')} />
-          <Text>dffgs</Text>
+          <Text></Text>
         </View>
       </TouchableWithoutFeedback>
     </View>

@@ -14,6 +14,10 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		7699B88040F8A987B510C191 /* libPods-kkApp-kkAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-kkApp-kkAppTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		4785CC8831EA4D22B8BD8848 /* Courgette-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4F94F74F3BA94B08B879176C /* Courgette-Regular.ttf */; };
+		E0E28D6E13FD437CB8AAF713 /* Poppins-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E3F83B692DBD4E6394CB3A2F /* Poppins-Medium.ttf */; };
+		0C2A08D5589448B289DD19EF /* Poppins-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 90351C7EDCEC44CE8231437A /* Poppins-Regular.ttf */; };
+		F45848DC20E045FC8F52FCC4 /* AkayaTelivigala-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C7AF3F5835C144568FD8FFAB /* AkayaTelivigala-Regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +48,10 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = kkApp/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-kkApp-kkAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kkApp-kkAppTests.release.xcconfig"; path = "Target Support Files/Pods-kkApp-kkAppTests/Pods-kkApp-kkAppTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		4F94F74F3BA94B08B879176C /* Courgette-Regular.ttf */ = {isa = PBXFileReference; name = "Courgette-Regular.ttf"; path = "../assets/fonts/Courgette-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		E3F83B692DBD4E6394CB3A2F /* Poppins-Medium.ttf */ = {isa = PBXFileReference; name = "Poppins-Medium.ttf"; path = "../assets/fonts/Poppins-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		90351C7EDCEC44CE8231437A /* Poppins-Regular.ttf */ = {isa = PBXFileReference; name = "Poppins-Regular.ttf"; path = "../assets/fonts/Poppins-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		C7AF3F5835C144568FD8FFAB /* AkayaTelivigala-Regular.ttf */ = {isa = PBXFileReference; name = "AkayaTelivigala-Regular.ttf"; path = "../assets/fonts/AkayaTelivigala-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +130,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				D4CB7B763CCA42AA81DFA68F /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -147,6 +156,18 @@
 			);
 			path = Pods;
 			sourceTree = "<group>";
+		};
+		D4CB7B763CCA42AA81DFA68F /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				4F94F74F3BA94B08B879176C /* Courgette-Regular.ttf */,
+				E3F83B692DBD4E6394CB3A2F /* Poppins-Medium.ttf */,
+				90351C7EDCEC44CE8231437A /* Poppins-Regular.ttf */,
+				C7AF3F5835C144568FD8FFAB /* AkayaTelivigala-Regular.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -244,6 +265,10 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				4785CC8831EA4D22B8BD8848 /* Courgette-Regular.ttf in Resources */,
+				E0E28D6E13FD437CB8AAF713 /* Poppins-Medium.ttf in Resources */,
+				0C2A08D5589448B289DD19EF /* Poppins-Regular.ttf in Resources */,
+				F45848DC20E045FC8F52FCC4 /* AkayaTelivigala-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
