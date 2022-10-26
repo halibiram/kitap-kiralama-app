@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -6,12 +6,16 @@ import {
   ImageBackground,
   Dimensions,
   Image,
+  TouchableOpacity,
 } from 'react-native';
+import Entypo from 'react-native-vector-icons/Entypo';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
-const Details = ({route}) => {
+const Details = ({route, navigation}) => {
+  const [heartActive, setHeartActive] = useState(false);
+
   const {item} = route.params;
   return (
     <View style={styles.containers}>
@@ -20,10 +24,22 @@ const Details = ({route}) => {
         source={item.image}
         style={styles.backgroundImage}>
         <Image source={item.image} style={styles.Image} />
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Entypo name="chevron-left" size={45} />
+        </TouchableOpacity>
+        <Text style={styles.bookTitle}>{item.title}</Text>
       </ImageBackground>
 
       <View style={styles.desciptionWrapper}>
-        <Text style={styles.bookTitle}>{item.title}</Text>
+        <View style={styles.heartWrapper}>
+          <TouchableOpacity onPress={() => setHeartActive(!heartActive)}>
+            <Entypo
+              name="heart"
+              size={32}
+              color={heartActive ? 'red' : 'gray'}
+            />
+          </TouchableOpacity>
+        </View>
         <View style={styles.bookAuthorWrapper}>
           <Text style={styles.bookAuthorTitle}>Yazar:</Text>
           <Text style={styles.bookAuthor}>{item.author}</Text>
@@ -36,6 +52,16 @@ const Details = ({route}) => {
           <Text style={styles.stockTitle}>Stok:</Text>
           <Text style={styles.stock}>{item.stock}</Text>
         </View>
+        <TouchableOpacity
+          onPress={() => alert('Yakinda burada olacak!')}
+          style={styles.buttonWrapper}>
+          <Text style={styles.buttonTitle}>Kitap Nerede?</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => alert('Kiralama sistemi aktif degil!')}
+          style={[styles.buttonWrapper, {backgroundColor: 'green'}]}>
+          <Text style={styles.buttonTitle}>Kirala</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -50,26 +76,47 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   Image: {
-    paddingLeft: 20,
     left: screenWidth / 2 - 78,
-    top: screenHeight * 0.6 - 330,
+    top: screenHeight * 0.6 - 350,
     height: 227.5,
     width: 156,
     borderRadius: 16,
   },
   desciptionWrapper: {
-    backgroundColor: 'green',
-    marginTop: -20,
+    backgroundColor: 'white',
+
+    marginTop: -25,
     height: 300,
     borderTopRightRadius: 30,
     borderTopLeftRadius: 30,
   },
+  heartWrapper: {
+    position: 'absolute',
+    right: 40,
+    top: -30,
+    width: 64,
+    height: 64,
+    backgroundColor: 'white',
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
+  },
+
   bookTitle: {
-    marginTop: 20,
+    fontFamily: 'AkayaTelivigala-Regular',
+    marginTop: 35,
     textAlign: 'center',
-    fontSize: 30,
-    fontWeight: 'bold',
-    color: 'white',
+    fontSize: 35,
+    color: 'black',
   },
   bookAuthorWrapper: {
     flexDirection: 'row',
@@ -78,12 +125,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   bookAuthorTitle: {
-    color: 'white',
+    color: 'black',
+    marginTop: 1,
+    fontFamily: 'Poppins-Medium',
     fontSize: 18,
-    fontWeight: 'bold',
   },
   bookAuthor: {
-    color: 'white',
+    fontFamily: 'Courgette-Regular',
+    color: 'black',
     fontSize: 18,
 
     marginLeft: 10,
@@ -94,11 +143,17 @@ const styles = StyleSheet.create({
     marginTop: 5,
     paddingHorizontal: 15,
   },
-  publisherTitle: {color: 'white', fontSize: 18, fontWeight: 'bold'},
-  publisher: {
-    color: 'white',
+  publisherTitle: {
+    color: 'black',
     fontSize: 18,
 
+    fontFamily: 'Poppins-Medium',
+  },
+  publisher: {
+    color: 'black',
+    fontSize: 18,
+
+    fontFamily: 'Courgette-Regular',
     marginLeft: 10,
   },
   stockWrapper: {
@@ -107,12 +162,34 @@ const styles = StyleSheet.create({
     marginTop: 5,
     paddingHorizontal: 15,
   },
-  stockTitle: {color: 'white', fontSize: 18, fontWeight: 'bold'},
+  stockTitle: {
+    color: 'black',
+    fontSize: 18,
+
+    fontFamily: 'Poppins-Medium',
+  },
   stock: {
-    color: 'white',
+    fontFamily: 'Courgette-Regular',
+    color: 'black',
     fontSize: 18,
 
     marginLeft: 10,
+  },
+  buttonWrapper: {
+    marginTop: 20,
+    marginHorizontal: 20,
+    backgroundColor: 'orange',
+
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 14,
+    borderRadius: 30,
+  },
+  buttonTitle: {
+    fontSize: 18,
+    color: 'white',
+    fontFamily: 'Poppins-Medium',
+    textAlign: 'center',
   },
 });
 export default Details;
