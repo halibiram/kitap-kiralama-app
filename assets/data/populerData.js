@@ -4,6 +4,8 @@ const populerData = [
     image: require('../images/nutuk.jpg'),
     title: 'Nutuk',
     author: 'Mustafa Kemal Atatürk',
+    publisher: 'Can yayinevi',
+    stock: 150,
     selected: true,
   },
   {
@@ -11,6 +13,8 @@ const populerData = [
     image: require('../images/sql.jpg'),
     title: 'Veritabani ve SQL',
     author: 'İhsan Özer',
+    publisher: 'Seckin yayinevi',
+    stock: 150,
     selected: false,
   },
   {
@@ -18,6 +22,8 @@ const populerData = [
     image: require('../images/sekerportakali.jpg'),
     title: 'Şeker Portakali',
     author: 'Jose Mauro De Vasconcelos',
+    publisher: 'Can yayinevi',
+    stock: 150,
     selected: false,
   },
 ];
