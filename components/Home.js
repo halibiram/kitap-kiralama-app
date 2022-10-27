@@ -29,7 +29,7 @@ const Home = ({navigation}) => {
   const [populerBook, setPopulerBook] = useState([]);
   const [lastBooks, setLastBooks] = useState([]);
 
-  //get populerBooks
+  // get populerBooks
   useEffect(() => {
     fetch('http://192.168.56.1:8090/api/book')
       .then(res => res.json())
@@ -37,18 +37,22 @@ const Home = ({navigation}) => {
         setPopulerBook(data);
       });
   }, []);
+  useEffect(() => {
+    fetch('http://192.168.56.1:8090/api/book?last=last')
+      .then(res => res.json())
+      .then(data => {
+        console.warn(data);
+        setLastBooks(data);
+      });
+  }, []);
   const renderPopulerBookItem = ({item}) => {
-    const host =
-      'http://192.168.56.1:8090/api' +
-      item.kapakresmi.substr(1, item.kapakresmi.length);
-
     return (
       <TouchableOpacity
-        key={item.id}
+        key={item.kitapNo}
         onPress={() => navigation.navigate('Details', {item: item})}>
         <View>
           <ImageBackground
-            source={{uri: host}}
+            source={{uri: item.kapakresmi}}
             imageStyle={styles.populerBookItemImageBg}
             style={[
               styles.populerBookItemWrapper,
@@ -64,20 +68,20 @@ const Home = ({navigation}) => {
   const renderNewBookItem = ({item}) => {
     return (
       <TouchableOpacity
-        key={item.id}
+        key={item.kitapNo}
         onPress={() => navigation.navigate('Details', {item: item})}>
         <View>
           <ImageBackground
-            source={item.image}
+            source={{uri: item.kapakresmi}}
             imageStyle={styles.newBookItemImageBg}
             style={[
               styles.newBookItemWrapper,
               {marginLeft: item.id === 4 ? 20 : 0},
             ]}>
             <Text numberOfLines={5} style={styles.newBookItemTitle}>
-              {item.title}
+              {item.adi}
             </Text>
-            <Text style={styles.newBookItemAuthor}>{item.author}</Text>
+            <Text style={styles.newBookItemAuthor}>{item.yazar}</Text>
           </ImageBackground>
         </View>
       </TouchableOpacity>
@@ -131,9 +135,9 @@ const Home = ({navigation}) => {
 
           <View style={styles.newBookList}>
             <FlatList
-              data={newData}
+              data={lastBooks}
               renderItem={renderNewBookItem}
-              keyExtractor={item => item.id}
+              keyExtractor={item => item.kitapNo}
               horizontal={true}
               showsHorizontalScrollIndicator={false}
             />

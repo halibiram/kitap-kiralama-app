@@ -21,13 +21,13 @@ const Details = ({route, navigation}) => {
     <View style={styles.containers}>
       <ImageBackground
         blurRadius={8.7}
-        source={item.image}
+        source={{uri: item.kapakresmi}}
         style={styles.backgroundImage}>
-        <Image source={item.image} style={styles.Image} />
+        <Image source={{uri: item.kapakresmi}} style={styles.Image} />
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Entypo name="chevron-left" size={45} />
         </TouchableOpacity>
-        <Text style={styles.bookTitle}>{item.title}</Text>
+        <Text style={styles.bookTitle}>{item.adi}</Text>
       </ImageBackground>
 
       <View style={styles.desciptionWrapper}>
@@ -42,15 +42,15 @@ const Details = ({route, navigation}) => {
         </View>
         <View style={styles.bookAuthorWrapper}>
           <Text style={styles.bookAuthorTitle}>Yazar:</Text>
-          <Text style={styles.bookAuthor}>{item.author}</Text>
+          <Text style={styles.bookAuthor}>{item.yazar}</Text>
         </View>
         <View style={styles.publisherWrapper}>
           <Text style={styles.publisherTitle}>Yayinevi:</Text>
-          <Text style={styles.publisher}>{item.publisher}</Text>
+          <Text style={styles.publisher}>{item.yayinevi}</Text>
         </View>
         <View style={styles.stockWrapper}>
           <Text style={styles.stockTitle}>Stok:</Text>
-          <Text style={styles.stock}>{item.stock}</Text>
+          <Text style={styles.stock}>{item.kitapNo}</Text>
         </View>
         <TouchableOpacity
           onPress={() => alert('Yakinda burada olacak!')}
