@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Text,
   StyleSheet,
@@ -8,6 +8,7 @@ import {
   ScrollView,
   StatusBar,
   TouchableOpacity,
+  TextInput,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Feather from 'react-native-vector-icons/Feather';
@@ -24,21 +25,37 @@ import {FlatList, TouchableNativeFeedback} from 'react-native-gesture-handler';
 Feather.loadFont();
 
 const Home = ({navigation}) => {
+  const [searchInput, setSearchInput] = useState('');
+  const [populerBook, setPopulerBook] = useState([]);
+  const [lastBooks, setLastBooks] = useState([]);
+
+  //get populerBooks
+  useEffect(() => {
+    fetch('http://192.168.56.1:8090/api/book')
+      .then(res => res.json())
+      .then(data => {
+        setPopulerBook(data);
+      });
+  }, []);
   const renderPopulerBookItem = ({item}) => {
+    const host =
+      'http://192.168.56.1:8090/api' +
+      item.kapakresmi.substr(1, item.kapakresmi.length);
+
     return (
       <TouchableOpacity
         key={item.id}
         onPress={() => navigation.navigate('Details', {item: item})}>
         <View>
           <ImageBackground
-            source={item.image}
+            source={{uri: host}}
             imageStyle={styles.populerBookItemImageBg}
             style={[
               styles.populerBookItemWrapper,
               {marginLeft: item.id === 1 ? 20 : 0},
             ]}>
-            <Text style={styles.populerBookItemTitle}>{item.title}</Text>
-            <Text style={styles.populerBookItemAuthor}>{item.author}</Text>
+            <Text style={styles.populerBookItemTitle}>{item.adi}</Text>
+            <Text style={styles.populerBookItemAuthor}>{item.yazar}</Text>
           </ImageBackground>
         </View>
       </TouchableOpacity>
@@ -88,7 +105,9 @@ const Home = ({navigation}) => {
         <View style={styles.searchWrapper}>
           <Feather name="search" size={24} color={colors.textDark} />
           <View style={styles.search}>
-            <Text style={styles.searchText}>Kitap veya Yazar ara</Text>
+            <TextInput style={styles.searchText}>
+              Kitap veya Yazar ara
+            </TextInput>
           </View>
         </View>
 
@@ -98,7 +117,7 @@ const Home = ({navigation}) => {
 
           <View style={styles.populerBookList}>
             <FlatList
-              data={populerData}
+              data={populerBook}
               renderItem={renderPopulerBookItem}
               keyExtractor={item => item.id}
               horizontal={true}
@@ -179,7 +198,9 @@ const styles = StyleSheet.create({
     color: colors.textDark,
     fontSize: 24,
   },
-  populerBookList: {},
+  populerBookList: {
+    marginHorizontal: 20,
+  },
   populerBookItemWrapper: {
     marginTop: 10,
 
@@ -194,9 +215,10 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   populerBookItemTitle: {
-    marginTop: 170,
+    marginTop: 160,
+    height: 30,
     fontFamily: 'Poppins-Regular',
-    fontSize: 14,
+    fontSize: 9,
     color: 'white',
     backgroundColor: '#0D253Ca0',
     paddingHorizontal: 5,
