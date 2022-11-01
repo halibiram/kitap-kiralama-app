@@ -9,18 +9,13 @@ import {
   StatusBar,
   TouchableOpacity,
   TextInput,
+  TouchableNativeFeedback,
+  FlatList,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Feather from 'react-native-vector-icons/Feather';
-import Icons from 'react-native-vector-icons/FontAwesome';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import newData from '../assets/data/newData';
-import colors from '../assets/colors/colors';
-import populerData from '../assets/data/populerData';
-import LinearGradient from 'react-native-linear-gradient';
-import {useNavigation} from '@react-navigation/native';
 
-import {FlatList, TouchableNativeFeedback} from 'react-native-gesture-handler';
+import colors from '../assets/colors/colors';
 
 Feather.loadFont();
 
@@ -31,20 +26,20 @@ const Home = ({navigation}) => {
 
   // get populerBooks
   useEffect(() => {
-    fetch('http://192.168.56.1:8090/api/book')
+    fetch('http://172.26.32.1:8090/api/book')
       .then(res => res.json())
       .then(data => {
         setPopulerBook(data);
       });
   }, []);
   useEffect(() => {
-    fetch('http://192.168.56.1:8090/api/book?last=last')
+    fetch('http://172.26.32.1:8090/api/book?last=last')
       .then(res => res.json())
       .then(data => {
-        console.warn(data);
         setLastBooks(data);
       });
   }, []);
+
   const renderPopulerBookItem = ({item}) => {
     return (
       <TouchableOpacity
@@ -87,6 +82,28 @@ const Home = ({navigation}) => {
       </TouchableOpacity>
     );
   };
+  const renderSearchBookItem = ({item}) => {
+    return (
+      <TouchableOpacity
+        key={item.kitapNo}
+        onPress={() => navigation.navigate('Details', {item: item})}>
+        <View>
+          <ImageBackground
+            source={{uri: item.kapakresmi}}
+            imageStyle={styles.searchBookItemImageBg}
+            style={[
+              styles.searchBookItemWrapper,
+              {marginLeft: item.id === 4 ? 20 : 0},
+            ]}>
+            <Text numberOfLines={5} style={styles.searchBookItemTitle}>
+              {item.adi}
+            </Text>
+            <Text style={styles.searchBookItemAuthor}>{item.yazar}</Text>
+          </ImageBackground>
+        </View>
+      </TouchableOpacity>
+    );
+  };
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollView}>
@@ -106,15 +123,15 @@ const Home = ({navigation}) => {
         </SafeAreaView>
 
         {/*Search Area */}
-        <View style={styles.searchWrapper}>
-          <Feather name="search" size={24} color={colors.textDark} />
-          <View style={styles.search}>
-            <TextInput style={styles.searchText}>
-              Kitap veya Yazar ara
-            </TextInput>
-          </View>
-        </View>
+        <TouchableNativeFeedback onPress={() => navigation.navigate('Search')}>
+          <View style={styles.searchWrapper}>
+            <Feather name="search" size={24} color={colors.textDark} />
 
+            <View style={styles.search}>
+              <Text style={styles.searchText}>Kitap veya Yazar ara...</Text>
+            </View>
+          </View>
+        </TouchableNativeFeedback>
         {/*Populer Books */}
         <View style={styles.populerBookWrapper}>
           <Text style={styles.populerBookTitle}>Önerilenler</Text>
@@ -123,7 +140,7 @@ const Home = ({navigation}) => {
             <FlatList
               data={populerBook}
               renderItem={renderPopulerBookItem}
-              keyExtractor={item => item.id}
+              keyExtractor={item => item.adi}
               horizontal={true}
               showsHorizontalScrollIndicator={false}
             />
@@ -137,7 +154,7 @@ const Home = ({navigation}) => {
             <FlatList
               data={lastBooks}
               renderItem={renderNewBookItem}
-              keyExtractor={item => item.kitapNo}
+              keyExtractor={item => item.adi}
               horizontal={true}
               showsHorizontalScrollIndicator={false}
             />
@@ -180,17 +197,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 20,
     paddingHorizontal: 20,
+    backgroundColor: '#fff',
+    padding: 10,
+    marginVertical: 10,
+    borderRadius: 20,
   },
   search: {
     flex: 1,
     marginLeft: 10,
+
     borderBottomColor: colors.textSecond,
-    borderBottomWidth: 2,
   },
   searchText: {
     color: colors.textSecond,
+    paddingHorizontal: 20,
     fontSize: 20,
-    fontFamily: 'Poppins-Regular',
+    fontFamily: 'Poppins-Medium',
+    alignItems: 'center',
   },
   populerBookWrapper: {
     marginTop: 20,
@@ -240,9 +263,8 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 8,
     borderBottomRightRadius: 8,
   },
-  newBookWrapper: {marginTop: 0},
+  newBookWrapper: {marginTop: 0, paddingHorizontal: 20},
   newBookTitle: {
-    paddingHorizontal: 20,
     fontFamily: 'Poppins-Regular',
     fontWeight: 'bold',
     color: colors.textDark,
@@ -258,8 +280,8 @@ const styles = StyleSheet.create({
     height: 180,
   },
   newBookItemTitle: {
-    marginTop: 145,
-
+    marginTop: 130,
+    height: 30,
     fontSize: 11,
     color: 'white',
     backgroundColor: '#0D253Ca0',

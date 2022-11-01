@@ -112,10 +112,10 @@ const styles = StyleSheet.create({
   },
 
   bookTitle: {
-    fontFamily: 'AkayaTelivigala-Regular',
+    fontFamily: 'Courgette-Regular',
     marginTop: 35,
     textAlign: 'center',
-    fontSize: 35,
+    fontSize: 25,
     color: 'black',
   },
   bookAuthorWrapper: {

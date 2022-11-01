@@ -24,6 +24,7 @@
     "react-native": "0.70.3",
     "react-native-camera": "^4.2.1",
     "react-native-drop-shadow": "^0.0.6",
+    "react-native-dropdown-select-list": "^1.0.23",
     "react-native-gesture-handler": "^2.8.0",
     "react-native-linear-gradient": "^2.6.2",
     "react-native-permissions": "^3.6.1",
