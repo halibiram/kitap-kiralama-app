@@ -22,7 +22,6 @@ const Search = () => {
   const handleSearch = text => {
     const formattedQuery = text.toLowerCase();
 
-    setQuery(text);
     setUrl('http://172.26.32.1:8090/api/?search=' + formattedQuery);
 
     fetch(url)
@@ -33,6 +32,7 @@ const Search = () => {
       .catch(error => {
         setError(error);
       });
+    setQuery(text);
   };
   //get Search book and author
   useEffect(() => {
