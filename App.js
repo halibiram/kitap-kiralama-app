@@ -16,6 +16,9 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Details from './components/Details';
 import Search from './components/Search';
+import Login from './components/Login';
+import Singin from './components/Singin';
+import Singup from './components/Singup';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -113,6 +116,21 @@ function App() {
         <Stack.Screen
           name="Search"
           component={Search}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Singin"
+          component={Singin}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Singup"
+          component={Singup}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
 
-export default function Btn({bgColor, btnLabel, textColor, Press}) {
+export default function Btn({bgColor, btnLabel, textColor, Press, Width}) {
   return (
     <TouchableOpacity
       onPress={Press}
@@ -9,7 +9,7 @@ export default function Btn({bgColor, btnLabel, textColor, Press}) {
         backgroundColor: bgColor,
         borderRadius: 100,
         alignItems: 'center',
-        width: 350,
+        width: Width,
         paddingVertical: 10,
         marginVertical: 10,
       }}>

@@ -82,28 +82,7 @@ const Home = ({navigation}) => {
       </TouchableOpacity>
     );
   };
-  const renderSearchBookItem = ({item}) => {
-    return (
-      <TouchableOpacity
-        key={item.kitapNo}
-        onPress={() => navigation.navigate('Details', {item: item})}>
-        <View>
-          <ImageBackground
-            source={{uri: item.kapakresmi}}
-            imageStyle={styles.searchBookItemImageBg}
-            style={[
-              styles.searchBookItemWrapper,
-              {marginLeft: item.id === 4 ? 20 : 0},
-            ]}>
-            <Text numberOfLines={5} style={styles.searchBookItemTitle}>
-              {item.adi}
-            </Text>
-            <Text style={styles.searchBookItemAuthor}>{item.yazar}</Text>
-          </ImageBackground>
-        </View>
-      </TouchableOpacity>
-    );
-  };
+
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollView}>

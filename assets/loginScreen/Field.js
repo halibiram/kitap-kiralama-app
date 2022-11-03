@@ -2,7 +2,7 @@ import React from 'react';
 import {TextInput} from 'react-native';
 import {darkGreen, green} from './Colors';
 
-const Field = props => {
+export default function Field(props) {
   return (
     <TextInput
       {...props}
@@ -17,6 +17,4 @@ const Field = props => {
       }}
       placeholderTextColor={green}></TextInput>
   );
-};
-
-export default Field;
+}
