@@ -11,11 +11,13 @@ import {
   TextInput,
   TouchableNativeFeedback,
   FlatList,
+  ActivityIndicator,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Feather from 'react-native-vector-icons/Feather';
 
 import colors from '../assets/colors/colors';
+import {BASE_URL} from '../config';
 
 Feather.loadFont();
 
@@ -23,17 +25,17 @@ const Home = ({navigation}) => {
   const [searchInput, setSearchInput] = useState('');
   const [populerBook, setPopulerBook] = useState([]);
   const [lastBooks, setLastBooks] = useState([]);
-
+  const [isLoading, setIsloading] = useState(true);
   // get populerBooks
   useEffect(() => {
-    fetch('http://172.26.32.1:8090/api/book')
+    setIsloading(true);
+    fetch(BASE_URL + '/api/book')
       .then(res => res.json())
       .then(data => {
         setPopulerBook(data);
+        setIsloading(false);
       });
-  }, []);
-  useEffect(() => {
-    fetch('http://172.26.32.1:8090/api/book?last=last')
+    fetch(BASE_URL + '/api/book?last=last')
       .then(res => res.json())
       .then(data => {
         setLastBooks(data);
@@ -47,7 +49,7 @@ const Home = ({navigation}) => {
         onPress={() => navigation.navigate('Details', {item: item})}>
         <View>
           <ImageBackground
-            source={{uri: item.kapakresmi}}
+            source={{uri: BASE_URL + item.kapakresmi}}
             imageStyle={styles.populerBookItemImageBg}
             style={[
               styles.populerBookItemWrapper,
@@ -67,7 +69,7 @@ const Home = ({navigation}) => {
         onPress={() => navigation.navigate('Details', {item: item})}>
         <View>
           <ImageBackground
-            source={{uri: item.kapakresmi}}
+            source={{uri: BASE_URL + item.kapakresmi}}
             imageStyle={styles.newBookItemImageBg}
             style={[
               styles.newBookItemWrapper,
@@ -130,13 +132,19 @@ const Home = ({navigation}) => {
           <Text style={styles.newBookTitle}>Yeni Eklenenler</Text>
 
           <View style={styles.newBookList}>
-            <FlatList
-              data={lastBooks}
-              renderItem={renderNewBookItem}
-              keyExtractor={item => item.adi}
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-            />
+            {isLoading ? (
+              <View style={styles.isLoadingWrapper}>
+                <ActivityIndicator size="large" color="#5500dc" />
+              </View>
+            ) : (
+              <FlatList
+                data={lastBooks}
+                renderItem={renderNewBookItem}
+                keyExtractor={item => item.adi}
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+              />
+            )}
           </View>
         </View>
       </ScrollView>
