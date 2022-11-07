@@ -1,14 +1,21 @@
-import React from 'react';
-import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import React, {useContext, useEffect, useState} from 'react';
+import {View, StyleSheet, Text, TouchableOpacity, Alert} from 'react-native';
 
 import Background from '../assets/loginScreen/Background';
 import Btn from '../assets/loginScreen/Btn';
 import {darkGreen, green} from '../assets/loginScreen/Colors';
 import Field from '../assets/loginScreen/Field';
 import {useNavigation} from '@react-navigation/native';
+import axios, {AxiosResponse, AxiosError} from 'axios';
+import {AuthContext} from '../context/AuthContext';
 
 const Singin = () => {
+  const {login, errorMessage, setErrorMessage, userInfo} =
+    useContext(AuthContext);
   const navigation = useNavigation();
+  const [user, setUser] = useState({username: null, password: null});
+  const [info, setInfo] = useState(false);
+
   return (
     <Background>
       <View style={{alignItems: 'center', width: 420}}>
@@ -21,6 +28,7 @@ const Singin = () => {
           }}>
           Giriş Yap
         </Text>
+
         <View
           style={{
             backgroundColor: 'white',
@@ -45,8 +53,14 @@ const Singin = () => {
           <Field
             placeholder="E-posta / Kullanici adi"
             keyboardType={'email-address'}
+            onChangeText={queryText => setUser({...user, username: queryText})}
           />
-          <Field placeholder="Sifre" secureTextEntry={true} />
+          <Field
+            placeholder="Sifre"
+            secureTextEntry={true}
+            onChangeText={queryText => setUser({...user, password: queryText})}
+          />
+          <Text style={{color: 'red'}}>{info ? errorMessage : null}</Text>
           <View
             style={{
               alignItems: 'flex-end',
@@ -62,7 +76,10 @@ const Singin = () => {
             textColor="white"
             bgColor={darkGreen}
             btnLabel="Giris Yap"
-            Press={() => alert('Giris denemesi yapildi.')}
+            Press={() => {
+              login(user), setInfo(true);
+            }}
+            Width={350}
           />
           <View style={{display: 'flex', flexDirection: 'row'}}>
             <Text style={{fontSize: 14, fontWeight: 'bold'}}>
