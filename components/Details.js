@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
+import {BASE_URL} from '../config';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -21,9 +22,12 @@ const Details = ({route, navigation}) => {
     <View style={styles.containers}>
       <ImageBackground
         blurRadius={8.7}
-        source={{uri: item.kapakresmi}}
+        source={{uri: BASE_URL + item.kapakresmi}}
         style={styles.backgroundImage}>
-        <Image source={{uri: item.kapakresmi}} style={styles.Image} />
+        <Image
+          source={{uri: BASE_URL + item.kapakresmi}}
+          style={styles.Image}
+        />
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Entypo name="chevron-left" size={45} />
         </TouchableOpacity>
@@ -77,7 +81,7 @@ const styles = StyleSheet.create({
   },
   Image: {
     left: screenWidth / 2 - 78,
-    top: screenHeight * 0.6 - 350,
+    top: screenHeight * 0.6 - 400,
     height: 227.5,
     width: 156,
     borderRadius: 16,
@@ -86,7 +90,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
 
     marginTop: -25,
-    height: 300,
+    height: 400,
     borderTopRightRadius: 30,
     borderTopLeftRadius: 30,
   },
@@ -113,7 +117,7 @@ const styles = StyleSheet.create({
 
   bookTitle: {
     fontFamily: 'Courgette-Regular',
-    marginTop: 35,
+    marginTop: 125,
     textAlign: 'center',
     fontSize: 25,
     color: 'black',
