@@ -1,3 +1,4 @@
+import axios from 'axios';
 import {style} from 'deprecated-react-native-prop-types/DeprecatedImagePropType';
 import React, {useState, useEffect} from 'react';
 import {
@@ -9,55 +10,39 @@ import {
   Image,
   SafeAreaView,
   TextInput,
+  TouchableOpacity,
 } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import colors from '../assets/colors/colors';
+import {BASE_URL} from '../config';
+import {useNavigation} from '@react-navigation/native';
 
 const Search = () => {
   const [query, setQuery] = useState('');
+
   const [searhData, setSearchData] = useState([]);
   const [isLoading, setIsloading] = useState(false);
   const [error, setError] = useState(null);
-  const [url, setUrl] = useState('http://172.26.32.1:8090/api/?search=' + null);
-  const handleSearch = text => {
-    const formattedQuery = text.toLowerCase();
-
-    setUrl('http://172.26.32.1:8090/api/?search=' + formattedQuery);
-
-    fetch(url)
-      .then(res => res.json())
-      .then(data => {
-        setSearchData(data);
-      })
-      .catch(error => {
-        setError(error);
-      });
-    setQuery(text);
-  };
-  //get Search book and author
+  const [url, setUrl] = useState(BASE_URL + '/api/?search=' + null);
+  const navigation = useNavigation();
+  //kitap ve yazar arama -- query degistiginde tetiklenecek
   useEffect(() => {
     setIsloading(true);
 
-    fetch(url)
-      .then(res => res.json())
-      .then(data => {
-        setSearchData(data);
+    let formattedQuery = query.toLowerCase();
 
+    axios
+      .get(BASE_URL + '/api/?search=' + formattedQuery)
+      .then(res => {
+        setSearchData(res.data);
         setIsloading(false);
       })
       .catch(error => {
-        setIsloading(false);
         setError(error);
+        setIsloading(false);
       });
-  }, []);
+  }, [query]);
 
-  if (isLoading) {
-    return (
-      <View style={styles.isLoadingWrapper}>
-        <ActivityIndicator size="large" color="#5500dc" />
-      </View>
-    );
-  }
   if (error) {
     return (
       <View style={styles.error}>
@@ -70,13 +55,20 @@ const Search = () => {
 
   const renderSearchItem = ({item}) => {
     return (
-      <View style={styles.listItem}>
-        <Image source={{uri: item.kapakresmi}} style={styles.coverImage} />
-        <View style={styles.metaInfo}>
-          <Text style={styles.title}>{item.adi}</Text>
-          <Text style={styles.title}>{item.yazar}</Text>
+      <TouchableOpacity
+        key={item.kitapNo}
+        onPress={() => navigation.navigate('Details', {item: item})}>
+        <View style={styles.listItem}>
+          <Image
+            source={{uri: BASE_URL + item.kapakresmi}}
+            style={styles.coverImage}
+          />
+          <View style={styles.metaInfo}>
+            <Text style={styles.title}>{item.adi}</Text>
+            <Text style={styles.title}>{item.yazar}</Text>
+          </View>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   };
 
@@ -103,19 +95,25 @@ const Search = () => {
             // autoCapitaitalize="none"
             // autoCorrect={false}
             clearButtonMode="always"
-            value={query}
-            onChangeText={queryText => handleSearch(queryText)}
+            onChangeText={queryText => setQuery(queryText)}
+            // value={query}
             placeholder="Kitap veya Yazar ara..."
             style={styles.searchText}
           />
         </View>
       </View>
       {/*List  */}
-      <FlatList
-        data={searhData}
-        keyExtractor={item => item.adi}
-        renderItem={renderSearchItem}
-      />
+      {isLoading ? (
+        <View style={styles.isLoadingWrapper}>
+          <ActivityIndicator size="large" color="#5500dc" />
+        </View>
+      ) : (
+        <FlatList
+          data={searhData}
+          keyExtractor={item => item.adi}
+          renderItem={renderSearchItem}
+        />
+      )}
     </View>
   );
 };
