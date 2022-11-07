@@ -1,14 +1,26 @@
-import React, {useState} from 'react';
+import React, {useContext, useEffect, useReducer, useState} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 
 import Btn from './Btn';
 import {darkGreen, green} from './Colors';
 import Field from './Field';
 import {useNavigation} from '@react-navigation/native';
-
+import {AuthContext} from '../../context/AuthContext';
 export default function singupPage(props) {
+  const {register, newUserInfo} = useContext(AuthContext);
   const [page, setPage] = useState('first');
+  const [newUser, setNewUser] = useState({
+    email: null,
+    name: null,
+    surname: null,
+    password: null,
+    birthdate: null,
+    gender: null,
+  });
   const navigation = useNavigation();
+  const [isSamePassword, setIsSamePassword] = useState('false');
+  const [info, setInfo] = useState(null);
+
   if (page == 'first') {
     return (
       <View
@@ -20,14 +32,25 @@ export default function singupPage(props) {
           paddingTop: 100,
           alignItems: 'center',
         }}>
-        <Field placeholder="Ad" />
-        <Field placeholder="Soyad" />
-
         <Field
-          placeholder="E-posta / Kullanici adi"
-          keyboardType={'email-address'}
+          placeholder="Ad"
+          onChangeText={queryText => setNewUser({...newUser, name: queryText})}
+        />
+        <Field
+          placeholder="Soyad"
+          onChangeText={queryText =>
+            setNewUser({...newUser, surname: queryText})
+          }
         />
 
+        <Field
+          placeholder="E-posta "
+          keyboardType={'email-address'}
+          onChangeText={queryText => setNewUser({...newUser, email: queryText})}
+        />
+        <Text style={{color: 'red'}}>
+          {newUserInfo === null ? null : newUserInfo.info}
+        </Text>
         <View style={{flexDirection: 'row'}}>
           <Text style={{fontSize: 14, fontWeight: 'bold'}}>
             Hesap acarak kullanici
@@ -64,7 +87,7 @@ export default function singupPage(props) {
           btnLabel="Hesap Aç"
           Width={350}
           Press={() => {
-            setPage('second');
+            register(newUser, setPage);
           }}
         />
         <View style={{display: 'flex', flexDirection: 'row'}}>
@@ -90,10 +113,40 @@ export default function singupPage(props) {
           paddingTop: 100,
           alignItems: 'center',
         }}>
-        <Field placeholder="Sifre" secureTextEntry={true} />
-        <Field placeholder="Tekrar Sifre" secureTextEntry={true} />
-        <Field placeholder="Dogum tarihi" keyboardType={'numeric'} />
-        <Field placeholder="Cinsiyet" />
+        <Field
+          placeholder="Kullanici adi "
+          keyboardType={'email-address'}
+          onChangeText={queryText =>
+            setNewUser({...newUser, username: queryText})
+          }
+        />
+        <Field
+          placeholder="Sifre"
+          secureTextEntry={true}
+          onChangeText={queryText =>
+            setNewUser({...newUser, password: queryText})
+          }
+        />
+        <Field
+          placeholder="Tekrar Sifre"
+          secureTextEntry={true}
+          onChangeText={queryText =>
+            newUser.password == queryText
+              ? setIsSamePassword(true)
+              : setIsSamePassword(false)
+          }
+        />
+        <Field
+          placeholder="Dogum tarihi"
+          keyboardType={'numeric'}
+          onChangeText={query => setNewUser({...newUser, birthdate: query})}
+        />
+        <Field
+          placeholder="Cinsiyet"
+          onChangeText={query => setNewUser({...newUser, gender: query})}
+        />
+        <Text style={{color: 'red'}}>{info}</Text>
+        <Text style={{color: 'red'}}>{newUserInfo.info}</Text>
         <View style={{flexDirection: 'row'}}>
           <Btn
             textColor="white"
@@ -110,7 +163,9 @@ export default function singupPage(props) {
               bgColor={darkGreen}
               btnLabel="Kayit ol"
               Press={() => {
-                navigation.navigate('Singin');
+                isSamePassword
+                  ? register(newUser, setPage)
+                  : setInfo('**Girilen sifreler ayni degil');
               }}
               Width={150}
             />
