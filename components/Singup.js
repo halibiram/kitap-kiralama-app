@@ -1,17 +1,8 @@
 import React, {useState} from 'react';
-import {
-  View,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-} from 'react-native';
+import {View, StyleSheet, Text} from 'react-native';
 
 import Background from '../assets/loginScreen/Background';
-import Btn from '../assets/loginScreen/Btn';
-import {darkGreen, green} from '../assets/loginScreen/Colors';
-import Field from '../assets/loginScreen/Field';
-import {useNavigation} from '@react-navigation/native';
+
 import SingupPage from '../assets/loginScreen/singupPage';
 const Singup = () => {
   return (

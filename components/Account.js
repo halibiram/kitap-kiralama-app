@@ -57,7 +57,7 @@ const Account = ({navigation}) => {
           getBook(userInfo, 'favori'),
           setUser(userInfo),
         ]
-      : [console.log('kullanici cikis yapti'), setUser(null)];
+      : [console.log('kullanici bulunamadi'), setUser(null)];
   }, [userInfo]);
   useEffect(() => {
     user === null ? setLoginPage(true) : setLoginPage(false);
@@ -76,7 +76,12 @@ const Account = ({navigation}) => {
       return (
         <TouchableOpacity
           key={item.kitapNo}
-          onPress={() => navigation.navigate('Details', {item: item})}>
+          onPress={() =>
+            navigation.navigate('Book', {
+              screen: 'Details',
+              params: {item: item},
+            })
+          }>
           <View>
             <ImageBackground
               source={{uri: BASE_URL + item.kapakresmi}}

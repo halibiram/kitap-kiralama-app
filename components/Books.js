@@ -4,15 +4,21 @@ import {useNavigation} from '@react-navigation/native';
 
 const Books = () => {
   const navigator = useNavigation();
-  const [count, setCfount] = useState(0);
-  const onPress = () => setCfount(prevCount => prevCount + 1);
+  const [count, setCount] = useState(0);
+  const onPress = () => setCount(prevCount => prevCount + 1);
+  console.log(count);
   return (
-    <View>
-      <Button onPress={onPress} title="Press Me" />
-      <Text>Count: {count}</Text>
-      <Text>Books</Text>
-
-      <Button onPress={() => navigator.navigate('Details')} title="Click Me!" />
+    <View style={{marginTop: 200}}>
+      <Text
+        style={{
+          fontSize: 35,
+          color: 'red',
+          textAlign: 'center',
+          marginBottom: 100,
+        }}>
+        Toplam: {count}
+      </Text>
+      <Button onPress={onPress} title="Artir" />
     </View>
   );
 };

@@ -4,7 +4,6 @@ import {Alert} from 'react-native';
 import axios from 'axios';
 import {BASE_URL} from '../config';
 
-import {registerAsset} from 'react-native-web/dist/cjs/modules/AssetRegistry';
 export const AuthContext = createContext();
 
 export const AuthProvider = ({children}) => {
@@ -34,7 +33,7 @@ export const AuthProvider = ({children}) => {
         }
       });
   };
-  const login = user => {
+  const login = (user, setSuccessLogin) => {
     const {username, password} = user;
     setIsloading(true);
     axios
@@ -51,8 +50,9 @@ export const AuthProvider = ({children}) => {
           username: res.data.kuladi,
           password: res.data.sifre,
         });
+        setErrorMessage(null); //Basari giriste hata mesajini sifirlamak icin
         Alert.alert('Hos Geldin!', res.data.adi, [
-          {text: 'Hos bulduk', onPress: () => console.log('Basildi')},
+          {text: 'Hos bulduk', onPress: () => setSuccessLogin(true)},
         ]);
         AsyncStorage.setItem(
           'user',
@@ -89,18 +89,14 @@ export const AuthProvider = ({children}) => {
   };
 
   const isLoadingIn = async () => {
-    try {
-      setIsloading(true);
+    setIsloading(true);
+    console.log('Kayitli kullanici getirilmeye calisiliyor');
+    await AsyncStorage.getItem('user')
+      .then(req => JSON.parse(req))
+      .then(data => setUserInfo(data))
+      .catch(err => console.log('veri hatasi **' + err));
 
-      await AsyncStorage.getItem('user')
-        .then(req => JSON.parse(req))
-        .then(data => setNewUserInfo(data))
-        .catch(err => console.log('veri hatasi **' + err));
-
-      setIsloading(false);
-    } catch (error) {
-      console.log('isLogged is error --> ' + error);
-    }
+    setIsloading(false);
   };
   useEffect(() => {
     isLoadingIn();

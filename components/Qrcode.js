@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
-import {Button, Text, View} from 'react-native';
+import {Alert, Button, Text, View} from 'react-native';
 import {RNCamera} from 'react-native-camera';
+import {BASE_URL} from '../config';
 
+import axios from 'axios';
 class ProductScanRNCamera extends Component {
   constructor(props) {
     super(props);
@@ -15,14 +17,30 @@ class ProductScanRNCamera extends Component {
       },
     };
   }
+  async getData(qrcodeData) {
+    firstIndex = qrcodeData.indexOf('/api');
+    Id = qrcodeData.substr(firstIndex, qrcodeData.length);
+    if (Id.includes('api/books')) {
+      await axios.get(BASE_URL + Id).then(res => {
+        console.log(res.data);
+        if (res.data.length === 1) {
+          this.props.navigation.navigate('Details', {item: res.data[0]});
+        } else Alert.alert('Kayit bulunamadi!');
+      });
+    }
+  }
 
   onBarCodeRead(scanResult) {
-    console.warn(scanResult.type);
-    console.warn(scanResult.data);
+    console.log(scanResult.type);
+    console.log(scanResult.data);
+
     if (scanResult.data != null) {
+      console.log('bu blok calisti!');
+      this.getData(scanResult.data);
+
       if (!this.barcodeCodes.includes(scanResult.data)) {
         this.barcodeCodes.push(scanResult.data);
-        console.warn('onBarCodeRead call');
+        console.log('onBarCodeRead call');
       }
     }
     return;

@@ -1,89 +1,27 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {
   Text,
   StyleSheet,
   View,
   Image,
-  ImageBackground,
   ScrollView,
-  StatusBar,
-  TouchableOpacity,
-  TextInput,
   TouchableNativeFeedback,
   FlatList,
   ActivityIndicator,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Feather from 'react-native-vector-icons/Feather';
-
+import useFetch from '../src/hooks/useFetch';
 import colors from '../assets/colors/colors';
 import {BASE_URL} from '../config';
+import BookCard from './BookCard';
 
 Feather.loadFont();
 
 const Home = ({navigation}) => {
-  const [searchInput, setSearchInput] = useState('');
-  const [populerBook, setPopulerBook] = useState([]);
-  const [lastBooks, setLastBooks] = useState([]);
-  const [isLoading, setIsloading] = useState(true);
-  // get populerBooks
-  useEffect(() => {
-    setIsloading(true);
-    fetch(BASE_URL + '/api/book')
-      .then(res => res.json())
-      .then(data => {
-        setPopulerBook(data);
-        setIsloading(false);
-      });
-    fetch(BASE_URL + '/api/book?last=last')
-      .then(res => res.json())
-      .then(data => {
-        setLastBooks(data);
-      });
-  }, []);
+  const {data: populerBook, err, loading} = useFetch(BASE_URL + '/api/book');
 
-  const renderPopulerBookItem = ({item}) => {
-    return (
-      <TouchableOpacity
-        key={item.kitapNo}
-        onPress={() => navigation.navigate('Details', {item: item})}>
-        <View>
-          <ImageBackground
-            source={{uri: BASE_URL + item.kapakresmi}}
-            imageStyle={styles.populerBookItemImageBg}
-            style={[
-              styles.populerBookItemWrapper,
-              {marginLeft: item.id === 1 ? 20 : 0},
-            ]}>
-            <Text style={styles.populerBookItemTitle}>{item.adi}</Text>
-            <Text style={styles.populerBookItemAuthor}>{item.yazar}</Text>
-          </ImageBackground>
-        </View>
-      </TouchableOpacity>
-    );
-  };
-  const renderNewBookItem = ({item}) => {
-    return (
-      <TouchableOpacity
-        key={item.kitapNo}
-        onPress={() => navigation.navigate('Details', {item: item})}>
-        <View>
-          <ImageBackground
-            source={{uri: BASE_URL + item.kapakresmi}}
-            imageStyle={styles.newBookItemImageBg}
-            style={[
-              styles.newBookItemWrapper,
-              {marginLeft: item.id === 4 ? 20 : 0},
-            ]}>
-            <Text numberOfLines={5} style={styles.newBookItemTitle}>
-              {item.adi}
-            </Text>
-            <Text style={styles.newBookItemAuthor}>{item.yazar}</Text>
-          </ImageBackground>
-        </View>
-      </TouchableOpacity>
-    );
-  };
+  const {data: lastBooks} = useFetch(BASE_URL + '/api/book?last=last');
 
   return (
     <View style={styles.container}>
@@ -114,39 +52,51 @@ const Home = ({navigation}) => {
           </View>
         </TouchableNativeFeedback>
         {/*Populer Books */}
-        <View style={styles.populerBookWrapper}>
-          <Text style={styles.populerBookTitle}>Önerilenler</Text>
-
-          <View style={styles.populerBookList}>
-            <FlatList
-              data={populerBook}
-              renderItem={renderPopulerBookItem}
-              keyExtractor={item => item.adi}
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-            />
+        {loading ? (
+          <View style={styles.isLoadingWrapper}>
+            <ActivityIndicator size="large" color="#5500dc" />
           </View>
-        </View>
-        {/*New Books */}
-        <View style={styles.newBookWrapper}>
-          <Text style={styles.newBookTitle}>Yeni Eklenenler</Text>
+        ) : (
+          <SafeAreaView>
+            <View style={styles.populerBookWrapper}>
+              <Text style={styles.populerBookTitle}>Önerilenler</Text>
 
-          <View style={styles.newBookList}>
-            {isLoading ? (
-              <View style={styles.isLoadingWrapper}>
-                <ActivityIndicator size="large" color="#5500dc" />
+              <View style={styles.populerBookList}>
+                <FlatList
+                  data={populerBook}
+                  renderItem={({item}) =>
+                    BookCard(item, BASE_URL, navigation, true)
+                  }
+                  keyExtractor={item => item.adi}
+                  horizontal={true}
+                  showsHorizontalScrollIndicator={false}
+                />
               </View>
-            ) : (
-              <FlatList
-                data={lastBooks}
-                renderItem={renderNewBookItem}
-                keyExtractor={item => item.adi}
-                horizontal={true}
-                showsHorizontalScrollIndicator={false}
-              />
-            )}
-          </View>
-        </View>
+            </View>
+            {/*New Books */}
+            <View style={styles.newBookWrapper}>
+              <Text style={styles.newBookTitle}>Yeni Eklenenler</Text>
+
+              <View style={styles.newBookList}>
+                {loading ? (
+                  <View style={styles.isLoadingWrapper}>
+                    <ActivityIndicator size="large" color="#5500dc" />
+                  </View>
+                ) : (
+                  <FlatList
+                    data={lastBooks}
+                    renderItem={({item}) =>
+                      BookCard(item, BASE_URL, navigation, false)
+                    }
+                    keyExtractor={item => item.adi}
+                    horizontal={true}
+                    showsHorizontalScrollIndicator={false}
+                  />
+                )}
+              </View>
+            </View>
+          </SafeAreaView>
+        )}
       </ScrollView>
     </View>
   );
@@ -215,75 +165,15 @@ const styles = StyleSheet.create({
   populerBookList: {
     marginHorizontal: 20,
   },
-  populerBookItemWrapper: {
-    marginTop: 10,
-
-    marginRight: 20,
-    width: 136,
-    height: 215,
-  },
-
-  populerBookItemImageBg: {
-    width: 136,
-    height: 209,
-    borderRadius: 12,
-  },
-  populerBookItemTitle: {
-    marginTop: 160,
-    height: 30,
-    fontFamily: 'Poppins-Regular',
-    fontSize: 9,
-    color: 'white',
-    backgroundColor: '#0D253Ca0',
-    paddingHorizontal: 5,
-    // borderTopRightRadius: 8,
-    // borderTopLeftRadius: 8,
-  },
-  populerBookItemAuthor: {
-    fontSize: 9,
-    padding: 3,
-
-    color: 'white',
-
-    backgroundColor: '#0D253Cf6',
-    paddingHorizontal: 5,
-    borderBottomLeftRadius: 8,
-    borderBottomRightRadius: 8,
-  },
-  newBookWrapper: {marginTop: 0, paddingHorizontal: 20},
   newBookTitle: {
+    paddingHorizontal: 20,
     fontFamily: 'Poppins-Regular',
     fontWeight: 'bold',
     color: colors.textDark,
     fontSize: 24,
   },
-  newBookList: {},
-  newBookItemImageBg: {width: 110, height: 180, borderRadius: 12},
-  newBookItemWrapper: {
-    marginTop: 7,
-
-    marginRight: 12,
-    width: 112,
-    height: 180,
-  },
-  newBookItemTitle: {
-    marginTop: 130,
-    height: 30,
-    fontSize: 11,
-    color: 'white',
-    backgroundColor: '#0D253Ca0',
-    paddingHorizontal: 5,
-  },
-  newBookItemAuthor: {
-    fontSize: 8,
-    padding: 3,
-
-    color: 'white',
-
-    backgroundColor: '#0D253Cf6',
-    paddingHorizontal: 5,
-    borderBottomLeftRadius: 8,
-    borderBottomRightRadius: 8,
+  isLoadingWrapper: {
+    paddingTop: 300,
   },
 });
 

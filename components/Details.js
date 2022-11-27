@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import axios from 'axios';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -10,14 +11,31 @@ import {
 } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {BASE_URL} from '../config';
-
+import {AuthContext} from '../context/AuthContext';
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
-
+const addFavBook = () => {
+  axios
+    .post(BASE_URL + 'commit', {
+      username,
+      password,
+      bookId,
+    })
+    .then(res => console.log(res.data));
+};
+const isFavBook = () => {};
 const Details = ({route, navigation}) => {
   const [heartActive, setHeartActive] = useState(false);
-
+  const {userInfo} = useContext(AuthContext);
   const {item} = route.params;
+  const [user, setUser] = useState(null);
+
+  // useEffect({if(heartActive){
+
+  // }},[heartActive])
+  // useEffect({
+
+  // },[userInfo])
   return (
     <View style={styles.containers}>
       <ImageBackground
@@ -61,11 +79,18 @@ const Details = ({route, navigation}) => {
           style={styles.buttonWrapper}>
           <Text style={styles.buttonTitle}>Kitap Nerede?</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => alert('Kiralama sistemi aktif degil!')}
-          style={[styles.buttonWrapper, {backgroundColor: 'green'}]}>
-          <Text style={styles.buttonTitle}>Kirala</Text>
-        </TouchableOpacity>
+        {userInfo && (
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('Book', {
+                screen: 'RentABook',
+                params: {item: item},
+              })
+            }
+            style={[styles.buttonWrapper, {backgroundColor: 'green'}]}>
+            <Text style={styles.buttonTitle}>Kirala</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );

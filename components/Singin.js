@@ -5,17 +5,23 @@ import Background from '../assets/loginScreen/Background';
 import Btn from '../assets/loginScreen/Btn';
 import {darkGreen, green} from '../assets/loginScreen/Colors';
 import Field from '../assets/loginScreen/Field';
-import {useNavigation} from '@react-navigation/native';
-import axios, {AxiosResponse, AxiosError} from 'axios';
+
 import {AuthContext} from '../context/AuthContext';
 
-const Singin = () => {
+const Singin = props => {
   const {login, errorMessage, setErrorMessage, userInfo} =
     useContext(AuthContext);
-  const navigation = useNavigation();
+  // const navigation = useNavigation();
   const [user, setUser] = useState({username: null, password: null});
-  const [info, setInfo] = useState(false);
+  const [successLogin, setSuccessLogin] = useState(false);
+  function gotoAccountScreen() {
+    props.navigation.navigate('Account');
+  }
+  useEffect(() => {
+    console.log('Kullanici basariyla giris yapti');
 
+    successLogin && gotoAccountScreen();
+  }, [successLogin]);
   return (
     <Background>
       <View style={{alignItems: 'center', width: 420}}>
@@ -60,13 +66,15 @@ const Singin = () => {
             secureTextEntry={true}
             onChangeText={queryText => setUser({...user, password: queryText})}
           />
-          <Text style={{color: 'red'}}>{info ? errorMessage : null}</Text>
+          {errorMessage !== null && (
+            <Text style={{color: 'red'}}>{errorMessage}</Text>
+          )}
           <View
             style={{
               alignItems: 'flex-end',
               width: '78%',
               paddingRight: 10,
-              marginBottom: 130,
+              marginBottom: 80,
             }}>
             <Text style={{color: darkGreen, fontWeight: 'bold', fontSize: 16}}>
               Sifreyi unuttun mu?
@@ -77,7 +85,7 @@ const Singin = () => {
             bgColor={darkGreen}
             btnLabel="Giris Yap"
             Press={() => {
-              login(user), setInfo(true);
+              login(user, setSuccessLogin);
             }}
             Width={350}
           />
@@ -85,7 +93,8 @@ const Singin = () => {
             <Text style={{fontSize: 14, fontWeight: 'bold'}}>
               Hesabin yok mu ?{' '}
             </Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Singup')}>
+            <TouchableOpacity
+              onPress={() => props.navigation.navigate('Singup')}>
               <Text style={{color: darkGreen, fontWeight: 'bold', font: 16}}>
                 Kayit ol !
               </Text>
