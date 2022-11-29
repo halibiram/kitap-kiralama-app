@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, {useContext, useEffect, useState} from 'react';
 import {
   StyleSheet,
@@ -9,33 +8,63 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
+
 import Entypo from 'react-native-vector-icons/Entypo';
 import {BASE_URL} from '../config';
 import {AuthContext} from '../context/AuthContext';
+
+import useDelete from '../src/hooks/useDelete';
+import usePost from '../src/hooks/usePost';
+
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
-const addFavBook = () => {
-  axios
-    .post(BASE_URL + 'commit', {
-      username,
-      password,
-      bookId,
-    })
-    .then(res => console.log(res.data));
-};
-const isFavBook = () => {};
+
 const Details = ({route, navigation}) => {
+  const {data, err, loading, info, post} = usePost();
+  const {deleteData} = useDelete();
+
   const [heartActive, setHeartActive] = useState(false);
-  const {userInfo} = useContext(AuthContext);
+  const {userInfo, userData, setCheckData, checkData} = useContext(AuthContext);
   const {item} = route.params;
-  const [user, setUser] = useState(null);
+  const [detailActive, setDetailActive] = useState(false);
+  const [rentBook, setRentBook] = useState(null);
 
-  // useEffect({if(heartActive){
+  const favBook = () => {
+    let data = {
+      userId: userInfo.userId,
+      bookId: item.kitapNo,
+    };
 
-  // }},[heartActive])
-  // useEffect({
+    !heartActive
+      ? post(BASE_URL + '/api/book/fav', data)
+      : deleteData(BASE_URL + '/api/book/fav', data);
+    setHeartActive(!heartActive);
+    setCheckData(!checkData);
+  };
 
-  // },[userInfo])
+  useEffect(() => {
+    let filterBook = userData.filter(book => book.kitapNo === item.kitapNo);
+    console.log(filterBook);
+
+    if (filterBook.length > 0) {
+      let checkFav = filterBook
+        .filter(book => book.islemtipi == 'favori')
+        .map(item => item.islemtipi == 'favori');
+      let rentBook = filterBook.filter(book => book.islemtipi === 'kiralama');
+      if (rentBook.length === 1) {
+        setRentBook(rentBook[0]);
+        setDetailActive(true);
+      } else {
+        setDetailActive(false);
+      }
+
+      checkFav[0] && setHeartActive(true);
+    } else {
+      setHeartActive(false);
+      setDetailActive(false);
+    }
+  }, [item, userData]);
+
   return (
     <View style={styles.containers}>
       <ImageBackground
@@ -46,20 +75,33 @@ const Details = ({route, navigation}) => {
           source={{uri: BASE_URL + item.kapakresmi}}
           style={styles.Image}
         />
+
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Entypo name="chevron-left" size={45} />
+          <View
+            style={{
+              width: 60,
+              height: 60,
+              backgroundColor: 'white',
+              borderRadius: 30,
+
+              justifyContent: 'center',
+            }}>
+            <Entypo name="chevron-left" size={60} />
+          </View>
         </TouchableOpacity>
         <Text style={styles.bookTitle}>{item.adi}</Text>
       </ImageBackground>
 
       <View style={styles.desciptionWrapper}>
         <View style={styles.heartWrapper}>
-          <TouchableOpacity onPress={() => setHeartActive(!heartActive)}>
-            <Entypo
-              name="heart"
-              size={32}
-              color={heartActive ? 'red' : 'gray'}
-            />
+          <TouchableOpacity onPress={() => favBook()}>
+            {!loading && (
+              <Entypo
+                name="heart"
+                size={32}
+                color={heartActive ? 'red' : 'gray'}
+              />
+            )}
           </TouchableOpacity>
         </View>
         <View style={styles.bookAuthorWrapper}>
@@ -74,12 +116,27 @@ const Details = ({route, navigation}) => {
           <Text style={styles.stockTitle}>Stok:</Text>
           <Text style={styles.stock}>{item.kitapNo}</Text>
         </View>
-        <TouchableOpacity
-          onPress={() => alert('Yakinda burada olacak!')}
-          style={styles.buttonWrapper}>
-          <Text style={styles.buttonTitle}>Kitap Nerede?</Text>
-        </TouchableOpacity>
-        {userInfo && (
+        {detailActive && (
+          <View style={{alignItems: 'center', paddingTop: 30}}>
+            <View style={styles.timeContainer}>
+              <Text style={styles.timeText}>Kalan Sure | </Text>
+              <Text style={styles.timeText}>son {rentBook.kalanSure} gun</Text>
+            </View>
+          </View>
+        )}
+        {detailActive && (
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('Book', {
+                screen: 'RentABook',
+                params: {item: item},
+              })
+            }
+            style={styles.buttonWrapper}>
+            <Text style={styles.buttonTitle}>Teslim Et</Text>
+          </TouchableOpacity>
+        )}
+        {!detailActive && userInfo && (
           <TouchableOpacity
             onPress={() =>
               navigation.navigate('Book', {
@@ -219,6 +276,18 @@ const styles = StyleSheet.create({
     color: 'white',
     fontFamily: 'Poppins-Medium',
     textAlign: 'center',
+  },
+  timeContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'red',
+    borderRadius: 5,
+  },
+  timeText: {
+    color: 'red',
+    fontSize: 20,
+    fontWeight: 'bold',
   },
 });
 export default Details;

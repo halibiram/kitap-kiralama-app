@@ -24,7 +24,10 @@ class ProductScanRNCamera extends Component {
       await axios.get(BASE_URL + Id).then(res => {
         console.log(res.data);
         if (res.data.length === 1) {
-          this.props.navigation.navigate('Details', {item: res.data[0]});
+          this.props.navigation.navigate('Book', {
+            screen: 'Details',
+            params: {item: res.data[0]},
+          });
         } else Alert.alert('Kayit bulunamadi!');
       });
     }

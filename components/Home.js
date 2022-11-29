@@ -64,6 +64,7 @@ const Home = ({navigation}) => {
               <View style={styles.populerBookList}>
                 <FlatList
                   data={populerBook}
+                  initialNumToRender={3}
                   renderItem={({item}) =>
                     BookCard(item, BASE_URL, navigation, true)
                   }
@@ -85,6 +86,7 @@ const Home = ({navigation}) => {
                 ) : (
                   <FlatList
                     data={lastBooks}
+                    initialNumToRender={3}
                     renderItem={({item}) =>
                       BookCard(item, BASE_URL, navigation, false)
                     }
@@ -153,7 +155,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   populerBookWrapper: {
-    marginTop: 20,
+    marginTop: 30,
   },
   populerBookTitle: {
     paddingHorizontal: 20,
@@ -165,12 +167,18 @@ const styles = StyleSheet.create({
   populerBookList: {
     marginHorizontal: 20,
   },
+  newBookWrapper: {
+    marginTop: 30,
+  },
   newBookTitle: {
     paddingHorizontal: 20,
     fontFamily: 'Poppins-Regular',
     fontWeight: 'bold',
     color: colors.textDark,
     fontSize: 24,
+  },
+  newBookList: {
+    marginHorizontal: 20,
   },
   isLoadingWrapper: {
     paddingTop: 300,

@@ -10,13 +10,11 @@ import {
   ActivityIndicator,
   FlatList,
   TouchableOpacity,
-  ImageBackground,
 } from 'react-native';
 import {AuthContext} from '../context/AuthContext';
 import Login from './Login';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import colors from '../assets/colors/colors';
+import BookCard from './BookCard';
 import {BASE_URL} from '../config';
 import axios from 'axios';
 
@@ -24,17 +22,17 @@ const Account = ({navigation}) => {
   const [user, setUser] = useState(null);
 
   const [loading, setLoading] = useState(false);
-  const [newRequest, setNewRequest] = useState(null);
+
   const [myBook, setMyBook] = useState(0);
   const [favoriBook, setFavoriBook] = useState(0);
-  const {logout, userInfo} = useContext(AuthContext);
+  const {logout, userInfo, userData} = useContext(AuthContext);
   const [loginPage, setLoginPage] = useState(false);
   const [showFlag, setShowFlag] = useState(true);
   const getBook = (data, info) => {
     let username = data.username === null ? userInfo.username : data.username;
     let password = data.password === null ? userInfo.password : data.password;
 
-    let request = info == 'mybook' ? newRequest : info;
+    let request = info == 'mybook' ? null : info;
     axios
       .post(BASE_URL + '/api/mybook', {
         username,
@@ -52,13 +50,12 @@ const Account = ({navigation}) => {
   useEffect(() => {
     userInfo !== null
       ? [
-          console.log('kullanici giris yapti'),
           getBook(userInfo, 'mybook'),
           getBook(userInfo, 'favori'),
-          setUser(userInfo),
+          !user && setUser(userInfo),
         ]
       : [console.log('kullanici bulunamadi'), setUser(null)];
-  }, [userInfo]);
+  }, [userInfo, showFlag, userData]);
   useEffect(() => {
     user === null ? setLoginPage(true) : setLoginPage(false);
   }, [user]);
@@ -72,33 +69,6 @@ const Account = ({navigation}) => {
   }
   if (loginPage) return <Login></Login>;
   else {
-    const renderBookItem = ({item}) => {
-      return (
-        <TouchableOpacity
-          key={item.kitapNo}
-          onPress={() =>
-            navigation.navigate('Book', {
-              screen: 'Details',
-              params: {item: item},
-            })
-          }>
-          <View>
-            <ImageBackground
-              source={{uri: BASE_URL + item.kapakresmi}}
-              imageStyle={styles.bookItemImageBg}
-              style={[
-                styles.bookItemWrapper,
-                {marginLeft: item.id === 4 ? 20 : 0},
-              ]}>
-              <Text numberOfLines={5} style={styles.bookItemTitle}>
-                {item.adi}
-              </Text>
-              <Text style={styles.bookItemAuthor}>{item.yazar}</Text>
-            </ImageBackground>
-          </View>
-        </TouchableOpacity>
-      );
-    };
     return (
       // <View>
       //   <Text style={{fontSize: 25, fontWeight: 'bold', color: 'darkred'}}>
@@ -110,10 +80,14 @@ const Account = ({navigation}) => {
       <SafeAreaView style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.titleBar}>
-            <MaterialIcons
-              name="arrow-back-ios"
-              size={30}
-              color={'#525750'}></MaterialIcons>
+            <TouchableOpacity>
+              <MaterialIcons
+                name="arrow-back-ios"
+                size={30}
+                color={'#525750'}
+                onPress={() => navigation.navigate('Home')}></MaterialIcons>
+            </TouchableOpacity>
+
             <MaterialIcons
               name="more-vert"
               size={30}
@@ -128,7 +102,7 @@ const Account = ({navigation}) => {
           </View>
           <View style={styles.infoContainer}>
             {/**ilk defa giriste hata verdigi icin gecici cozum */}
-            {user === null ? null : (
+            {user && (
               <Text style={styles.text}>{user.name + ' ' + user.surname}</Text>
             )}
           </View>
@@ -149,13 +123,17 @@ const Account = ({navigation}) => {
                   showFlag && {backgroundColor: 'green'},
                 ]}>
                 <Text
-                  style={{
-                    fontSize: 16,
-                    fontWeight: 'bold',
-                  }}>
+                  style={[
+                    showFlag && {color: 'white'},
+                    {fontSize: 16, fontWeight: 'bold'},
+                  ]}>
                   Okunan Kitaplar
                 </Text>
-                <Text style={{fontSize: 26, fontWeight: '600'}}>
+                <Text
+                  style={[
+                    showFlag && {color: 'white'},
+                    {fontSize: 26, fontWeight: '600'},
+                  ]}>
                   {Object.keys(myBook).length === null
                     ? 0
                     : Object.keys(myBook).length}
@@ -171,10 +149,18 @@ const Account = ({navigation}) => {
                   styles.statsBox,
                   !showFlag && {backgroundColor: 'green'},
                 ]}>
-                <Text style={{fontSize: 16, fontWeight: 'bold'}}>
+                <Text
+                  style={[
+                    !showFlag && {color: 'white'},
+                    {fontSize: 16, fontWeight: 'bold'},
+                  ]}>
                   Favori kitaplar
                 </Text>
-                <Text style={{fontSize: 26, fontWeight: '600'}}>
+                <Text
+                  style={[
+                    !showFlag && {color: 'white'},
+                    {fontSize: 26, fontWeight: '600'},
+                  ]}>
                   {Object.keys(favoriBook).length}
                 </Text>
               </View>
@@ -183,8 +169,12 @@ const Account = ({navigation}) => {
           <View style={styles.bookList}>
             <FlatList
               data={showFlag ? myBook : favoriBook}
-              renderItem={renderBookItem}
-              keyExtractor={item => item.adi}
+              renderItem={({item}) =>
+                BookCard(item, BASE_URL, navigation, false)
+              }
+              keyExtractor={(item, index) => {
+                return index.toString();
+              }}
               horizontal={true}
               showsHorizontalScrollIndicator={false}
             />

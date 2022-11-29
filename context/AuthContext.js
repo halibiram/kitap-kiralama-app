@@ -3,6 +3,7 @@ import {useEffect, useState, createContext} from 'react';
 import {Alert} from 'react-native';
 import axios from 'axios';
 import {BASE_URL} from '../config';
+import usePost from '../src/hooks/usePost';
 
 export const AuthContext = createContext();
 
@@ -11,6 +12,8 @@ export const AuthProvider = ({children}) => {
   const [userInfo, setUserInfo] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
   const [newUserInfo, setNewUserInfo] = useState({status: null, info: ''});
+  const [userData, setUserData] = useState(null);
+  const [checkData, setCheckData] = useState(false);
 
   const register = (newuser, setPage) => {
     const {email, name, surname, username, password, birthdate, gender} =
@@ -101,6 +104,24 @@ export const AuthProvider = ({children}) => {
   useEffect(() => {
     isLoadingIn();
   }, []);
+  useEffect(() => {
+    if (userInfo) {
+      const request = {
+        username: userInfo.username,
+        password: userInfo.password,
+        request: 'all',
+      };
+
+      axios
+        .post(BASE_URL + '/api/mybook', request)
+        .then(responseData => {
+          setUserData(responseData.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+  }, [userInfo, checkData]);
   return (
     <AuthContext.Provider
       value={{
@@ -108,6 +129,9 @@ export const AuthProvider = ({children}) => {
         logout,
         setErrorMessage,
         register,
+        setCheckData,
+        checkData,
+        userData,
         userInfo,
         isLoading,
         errorMessage,

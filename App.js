@@ -115,7 +115,7 @@ function App() {
             //style: styles.tabBar,
             activeTintColor: 'green',
             inactiveTintColor: 'gray',
-
+            keyboardHidesTabBar: true,
             showLabel: false,
           }}>
           <Tab.Screen
