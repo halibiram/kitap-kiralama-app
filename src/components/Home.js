@@ -12,7 +12,7 @@ import {
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Feather from 'react-native-vector-icons/Feather';
 import useFetch from '../hooks/useFetch';
-import colors from '../../assets/colors/colors';
+import colors from '../assets/colors/colors';
 import {BASE_URL} from '../../config';
 import BookCard from './BookCard';
 

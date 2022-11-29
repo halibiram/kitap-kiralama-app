@@ -11,7 +11,7 @@ import {
   FlatList,
   TouchableOpacity,
 } from 'react-native';
-import {AuthContext} from '../../context/AuthContext';
+import {AuthContext} from '../context/AuthContext';
 import Login from './Login';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import BookCard from './BookCard';

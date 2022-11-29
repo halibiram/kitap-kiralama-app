@@ -10,11 +10,11 @@ import {
 } from 'react-native';
 
 import Entypo from 'react-native-vector-icons/Entypo';
-import {BASE_URL} from '../config';
+import {BASE_URL} from '../../config';
 import {AuthContext} from '../context/AuthContext';
 
-import useDelete from '../src/hooks/useDelete';
-import usePost from '../src/hooks/usePost';
+import useDelete from '../hooks/useDelete';
+import usePost from '../hooks/usePost';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;

@@ -1,9 +1,9 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Text, SafeAreaView, View, Image} from 'react-native';
-import usePost from '../../src/hooks/usePost';
+import usePost from '../../hooks/usePost';
 import {AuthContext} from '../../context/AuthContext';
 
-import {BASE_URL} from '../../config';
+import {BASE_URL} from '../../../config';
 import styles from './RentABook.style';
 import {Button} from './Button';
 import {DateButton} from './DateButton';

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Alert, Button, Text, View} from 'react-native';
 import {RNCamera} from 'react-native-camera';
-import {BASE_URL} from '../config';
+import {BASE_URL} from '../../config';
 
 import axios from 'axios';
 class ProductScanRNCamera extends Component {

@@ -13,7 +13,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
-import colors from '../../assets/colors/colors';
+import colors from '../assets/colors/colors';
 import {BASE_URL} from '../../config';
 import {useNavigation} from '@react-navigation/native';
 

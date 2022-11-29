@@ -1,12 +1,12 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {View, StyleSheet, Text, TouchableOpacity, Alert} from 'react-native';
 
-import Background from '../../assets/loginScreen/Background';
-import Btn from '../../assets/loginScreen/Btn';
-import {darkGreen, green} from '../../assets/loginScreen/Colors';
-import Field from '../../assets/loginScreen/Field';
+import Background from '../assets/loginScreen/Background';
+import Btn from '../assets/loginScreen/Btn';
+import {darkGreen, green} from '../assets/loginScreen/Colors';
+import Field from '../assets/loginScreen/Field';
 
-import {AuthContext} from '../../context/AuthContext';
+import {AuthContext} from '../context/AuthContext';
 
 const Singin = props => {
   const {login, errorMessage, setErrorMessage, userInfo} =

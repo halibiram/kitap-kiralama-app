@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import {AuthContext} from './context/AuthContext';
+import {AuthContext} from './src/context/AuthContext';
 import {StyleSheet} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -8,18 +8,18 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import HomeScreen from './components/Home.js';
-import Category from './components/Category';
-import Qrcode from './components/Qrcode';
-import Books from './components/Books';
-import Account from './components/Account';
-import Details from './components/Details';
-import Search from './components/Search';
-import Login from './components/Login';
-import Singin from './components/Singin';
-import Singup from './components/Singup';
-import {AuthProvider} from './context/AuthContext.js';
-import RentABook from './components/RentABook';
+import HomeScreen from './src/components/Home.js';
+import Category from './src/components/Category';
+import Qrcode from './src/components/Qrcode';
+import Books from './src/components/Books';
+import Account from './src/components/Account';
+import Details from './src/components/Details';
+import Search from './src/components/Search';
+import Login from './src/components/Login';
+import Singin from './src/components/Singin';
+import Singup from './src/components/Singup';
+import {AuthProvider} from './src/context/AuthContext.js';
+import RentABook from './src/components/RentABook';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
