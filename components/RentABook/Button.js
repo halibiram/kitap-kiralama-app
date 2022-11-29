@@ -1,7 +1,15 @@
 import React from 'react';
 import {ActivityIndicator, Text, TouchableOpacity} from 'react-native';
 
-export function Button({bgColor, btnLabel, textColor, Press, Width, loading}) {
+export function Button({
+  bgColor,
+  btnLabel,
+  textColor,
+  Press,
+  Width,
+  loading,
+  touch,
+}) {
   return (
     <TouchableOpacity
       onPress={Press}
@@ -13,7 +21,7 @@ export function Button({bgColor, btnLabel, textColor, Press, Width, loading}) {
         paddingVertical: 20,
         marginVertical: 10,
       }}
-      disabled={loading}>
+      disabled={touch}>
       {loading ? (
         <ActivityIndicator size={28} color={'white'} />
       ) : (
