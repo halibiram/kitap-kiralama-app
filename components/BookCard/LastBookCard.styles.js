@@ -1,16 +1,16 @@
 import {StyleSheet} from 'react-native';
 
 export default StyleSheet.create({
-  bookItemImageBg: {width: 110, height: 180, borderRadius: 12},
+  bookItemImageBg: {width: 130, height: 210, borderRadius: 12},
   bookItemWrapper: {
-    marginTop: 7,
+    marginTop: 15,
 
     marginRight: 12,
-    width: 112,
-    height: 180,
+    width: 132,
+    height: 210,
   },
   bookItemTitle: {
-    marginTop: 130,
+    marginTop: 160,
     height: 30,
     fontSize: 11,
     color: 'white',

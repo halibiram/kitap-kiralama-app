@@ -2,20 +2,20 @@ import {StyleSheet} from 'react-native';
 
 export default StyleSheet.create({
   bookItemWrapper: {
-    marginTop: 10,
+    marginTop: 20,
 
-    marginRight: 20,
-    width: 136,
-    height: 215,
+    marginRight: 12,
+    width: 180,
+    height: 260,
   },
 
   bookItemImageBg: {
-    width: 136,
-    height: 209,
+    width: 180,
+    height: 260,
     borderRadius: 12,
   },
   bookItemTitle: {
-    marginTop: 160,
+    marginTop: 210,
     height: 30,
     fontFamily: 'Poppins-Regular',
     fontSize: 9,
