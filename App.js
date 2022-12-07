@@ -20,6 +20,7 @@ import Singin from './src/components/Singin';
 import Singup from './src/components/Singup';
 import {AuthProvider} from './src/context/AuthContext.js';
 import RentABook from './src/components/RentABook';
+import DeliverBook from './src/components/DeliverBook';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -102,6 +103,11 @@ const BookStack = () => {
         component={RentABook}
         options={{headerShown: false}}
       />
+      <Stack.Screen
+        name="DeliverBook"
+        component={DeliverBook}
+        options={{headerShown: false}}
+      />
     </Stack.Navigator>
   );
 };
@@ -141,6 +147,16 @@ function App() {
           <Tab.Screen
             name="Qrcode"
             component={Qrcode}
+            initialParams={{deliver: false}}
+            listeners={({navigation}) => ({
+              tabPress: e => {
+                // Prevent default action
+                e.preventDefault();
+
+                // Do something with the `navigation` object
+                navigation.navigate('Qrcode', {deliver: false, item: null}); // Here!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+              },
+            })}
             options={{
               headerShown: false,
               tabBarIcon: ({color}) => (
