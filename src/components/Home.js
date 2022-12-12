@@ -42,7 +42,7 @@ const Home = ({navigation}) => {
         </SafeAreaView>
 
         {/*Search Area */}
-        <TouchableNativeFeedback onPress={() => navigation.navigate('Search')}>
+        <TouchableNativeFeedback onPress={() => navigation.navigate('Book')}>
           <View style={styles.searchWrapper}>
             <Feather name="search" size={24} color={colors.textDark} />
 
@@ -64,11 +64,12 @@ const Home = ({navigation}) => {
               <View style={styles.populerBookList}>
                 <FlatList
                   data={populerBook}
-                  initialNumToRender={3}
                   renderItem={({item}) =>
                     BookCard(item, BASE_URL, navigation, true)
                   }
-                  keyExtractor={item => item.adi}
+                  keyExtractor={(item, index) => {
+                    return index.toString();
+                  }}
                   horizontal={true}
                   showsHorizontalScrollIndicator={false}
                 />
@@ -86,11 +87,12 @@ const Home = ({navigation}) => {
                 ) : (
                   <FlatList
                     data={lastBooks}
-                    initialNumToRender={3}
                     renderItem={({item}) =>
                       BookCard(item, BASE_URL, navigation, false)
                     }
-                    keyExtractor={item => item.adi}
+                    keyExtractor={(item, index) => {
+                      return index.toString();
+                    }}
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}
                   />

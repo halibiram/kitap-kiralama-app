@@ -127,12 +127,12 @@ const Account = ({navigation}) => {
                     showFlag && {color: 'white'},
                     {fontSize: 16, fontWeight: 'bold'},
                   ]}>
-                  Okunan Kitaplar
+                  Mevcut Kitaplar
                 </Text>
                 <Text
                   style={[
                     showFlag && {color: 'white'},
-                    {fontSize: 26, fontWeight: '600'},
+                    {fontSize: 26, fontWeight: '600', marginTop: 20},
                   ]}>
                   {Object.keys(myBook).length === null
                     ? 0
@@ -154,7 +154,7 @@ const Account = ({navigation}) => {
                     !showFlag && {color: 'white'},
                     {fontSize: 16, fontWeight: 'bold'},
                   ]}>
-                  Favori kitaplar
+                  Okunan&Favori kitaplar
                 </Text>
                 <Text
                   style={[

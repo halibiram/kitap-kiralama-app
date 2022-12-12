@@ -1,21 +1,73 @@
-import React, {useState} from 'react';
+import React, {useState, useMemo, useEffect} from 'react';
 import {Text, View, TouchableOpacity} from 'react-native';
 import styles from './DeliverBook.style';
 import {Button} from '../RentABook/Button';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import usePatch from '../../hooks/usePatch';
+import {BASE_URL} from '../../../config';
 
-const DeliverBook = ({deliver, navigation}) => {
+const DeliverBook = ({deliver, navigation, item, route, qrcode}) => {
   const [check, setCheck] = useState({
-    scanBookcase: true,
+    scanBookcase: false,
     scanBook: true,
-    bookcaseId: 5,
-    bookId: 5,
+    bookcaseId: null,
+    bookId: item.kitapNo,
   });
+  const [checkBookcase, setCheckBookcase] = useState(false);
+  const {patchInfo, patch} = usePatch();
+  useEffect(() => {
+    if (route.params.scanResult) {
+      let scanData = route.params.scanResult;
+      checked(scanData);
+    } else if (qrcode) {
+      setCheck({...check, scanBook: true, bookId: item.kitapNo});
+    } else if (route.params.check) {
+      setCheck({
+        scanBookcase: true,
+        scanBook: true,
+        bookcaseId: null,
+        bookId: route.params.item.kitapNo,
+      });
+    }
+  }, [route.params.scanResult]); //
+
+  useEffect(() => {
+    console.log(patchInfo);
+
+    if (check.bookId && check.bookcaseId) {
+      checkedBookcase();
+    }
+  }, [checkBookcase]);
+  const checked = data => {
+    if (data.includes('book')) {
+      let firstIndex = data.indexOf('book');
+      let id = data.substr(firstIndex + 6, data.length);
+      setCheck({...check, scanBook: true, bookId: id});
+    } else if (data.includes('qrcode')) {
+      let firstIndex = data.indexOf('qrcode');
+
+      let id = data.substr(firstIndex + 7, data.length);
+
+      setCheck({...check, scanBookcase: true, bookcaseId: id});
+    }
+    if (check.bookId) {
+      setCheckBookcase(!checkBookcase);
+    }
+  };
+  const checkedBookcase = () => {
+    let patchData = {
+      bookId: check.bookId,
+      bookcaseId: check.bookcaseId,
+      userId: null,
+    };
+    patch(BASE_URL + '/api/rentbook/check', patchData, navigation, item);
+  };
+
   return (
     <View style={styles.Container}>
       <TouchableOpacity
         onPress={() => {
-          setCheck({...check, scanBookcase: !check.scanBookcase});
+          navigation.navigate('Qrcode', {deliver: true, item: item});
         }}
         disabled={check.bookcaseId && true}>
         <View
@@ -27,7 +79,9 @@ const DeliverBook = ({deliver, navigation}) => {
                 : {borderColor: 'red'}
               : null,
           ]}>
-          <Text style={[styles.inputText]}>Dolap karekodunu okut</Text>
+          <Text style={[styles.inputText]}>
+            {check.bookcaseId ? check.bookcaseId : 'Dolap karekodunu okut'}
+          </Text>
           {check.bookcaseId ? (
             <MaterialCommunityIcons
               name="check-decagram"
@@ -41,7 +95,7 @@ const DeliverBook = ({deliver, navigation}) => {
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => {
-          setCheck({...check, scanBook: !check.scanBook});
+          navigation.navigate('Qrcode', {deliver: true, item: item});
         }}
         disabled={check.bookId && true}>
         <View
@@ -53,7 +107,9 @@ const DeliverBook = ({deliver, navigation}) => {
                 : {borderColor: 'red'}
               : null,
           ]}>
-          <Text style={styles.inputText}>Kitap karekodunu okut</Text>
+          <Text style={styles.inputText}>
+            {check.bookId ? check.bookId : 'Kitap karekodunu okut'}
+          </Text>
           {check.bookId ? (
             <MaterialCommunityIcons
               name="check-decagram"
@@ -72,7 +128,7 @@ const DeliverBook = ({deliver, navigation}) => {
           btnLabel="Teslim Et"
           Width={150}
           Press={() => {
-            null;
+            deliver(check.bookId, check.bookcaseId);
           }}
           loading={false}
           touch={check.bookId && check.bookcaseId ? false : true}

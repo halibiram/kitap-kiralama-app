@@ -3,7 +3,6 @@ import {useEffect, useState, createContext} from 'react';
 import {Alert} from 'react-native';
 import axios from 'axios';
 import {BASE_URL} from '../../config';
-import usePost from '../hooks/usePost';
 
 export const AuthContext = createContext();
 
@@ -52,6 +51,7 @@ export const AuthProvider = ({children}) => {
 
           username: res.data.kuladi,
           password: res.data.sifre,
+          picture: res.data.kulResim,
         });
         setErrorMessage(null); //Basari giriste hata mesajini sifirlamak icin
         Alert.alert('Hos Geldin!', res.data.adi, [
@@ -66,6 +66,7 @@ export const AuthProvider = ({children}) => {
 
             username: res.data.kuladi,
             password: res.data.sifre,
+            picture: res.data.kulResim,
           }),
         )
           .then(json => console.log('basariyla veri kayit edildi'))
@@ -101,9 +102,11 @@ export const AuthProvider = ({children}) => {
 
     setIsloading(false);
   };
+  //uygulama acildiginda kayitli kullanici kontrol eden tetikleyici
   useEffect(() => {
     isLoadingIn();
   }, []);
+  //kullani giris yaptiginda kitap datalarini cekmek icin
   useEffect(() => {
     if (userInfo) {
       const request = {

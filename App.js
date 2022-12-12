@@ -18,9 +18,12 @@ import Search from './src/components/Search';
 import Login from './src/components/Login';
 import Singin from './src/components/Singin';
 import Singup from './src/components/Singup';
-import {AuthProvider} from './src/context/AuthContext.js';
 import RentABook from './src/components/RentABook';
 import DeliverBook from './src/components/DeliverBook';
+import BookLocation from './src/components/BookLocation';
+import CategoryCardList from './src/components/CategoryCardList';
+
+import {AuthProvider} from './src/context/AuthContext.js';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -71,6 +74,12 @@ const HomeStack = () => {
           headerShown: false,
         }}
       />
+    </Stack.Navigator>
+  );
+};
+const BookStack = () => {
+  return (
+    <Stack.Navigator>
       <Stack.Screen
         name="Search"
         component={Search}
@@ -78,12 +87,6 @@ const HomeStack = () => {
           headerShown: false,
         }}
       />
-    </Stack.Navigator>
-  );
-};
-const BookStack = () => {
-  return (
-    <Stack.Navigator>
       <Stack.Screen
         name="Books"
         component={Books}
@@ -106,6 +109,16 @@ const BookStack = () => {
       <Stack.Screen
         name="DeliverBook"
         component={DeliverBook}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="BookLocation"
+        component={BookLocation}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="CategoryCardList"
+        component={CategoryCardList}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
@@ -171,6 +184,15 @@ function App() {
           <Tab.Screen
             name="Book"
             component={BookStack}
+            listeners={({navigation}) => ({
+              tabPress: e => {
+                // Prevent default action
+                e.preventDefault();
+
+                // Do something with the `navigation` object
+                navigation.navigate('Book', {screen: 'Search'}); // Here!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+              },
+            })}
             options={{
               headerShown: false,
               tabBarIcon: ({color}) => (

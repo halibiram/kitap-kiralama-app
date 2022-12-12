@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {StyleSheet, Text, Button, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
-const Books = () => {
+const Books = ({navigation}) => {
   const navigator = useNavigation();
   const [count, setCount] = useState(0);
   const onPress = () => setCount(prevCount => prevCount + 1);
@@ -18,7 +18,14 @@ const Books = () => {
         }}>
         Toplam: {count}
       </Text>
-      <Button onPress={onPress} title="Artir" />
+      <Button
+        onPress={() =>
+          navigation.navigate('Book', {
+            screen: 'BookLocation',
+          })
+        }
+        title="Artir"
+      />
     </View>
   );
 };

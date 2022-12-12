@@ -9,7 +9,7 @@ class ProductScanRNCamera extends Component {
     super(props);
     this.camera = null;
     this.barcodeCodes = [];
-
+    console.log(typeof this.barcodeCodes);
     this.state = {
       camera: {
         type: RNCamera.Constants.Type.back,
@@ -17,20 +17,37 @@ class ProductScanRNCamera extends Component {
       },
     };
   }
+
   async getData(qrcodeData) {
-    firstIndex = qrcodeData.indexOf('/api');
+    firstIndex = qrcodeData.indexOf('api');
     Id = qrcodeData.substr(firstIndex, qrcodeData.length);
-    if (Id.includes('api/books')) {
-      await axios.get(BASE_URL + Id).then(res => {
-        console.log(res.data);
-        if (res.data.length === 1) {
-          this.props.navigation.navigate('Book', {
-            screen: 'Details',
-            params: {item: res.data[0]},
+
+    if (Id.includes('api/books') || Id.includes('api/qrcode')) {
+      if (this.props.route.params.deliver) {
+        this.props.navigation.navigate('Book', {
+          screen: 'RentABook',
+          params: {item: this.props.route.params.item, scanResult: Id},
+        });
+      } else {
+        try {
+          await axios.get(BASE_URL + '/' + Id).then(res => {
+            console.log(res.data);
+            if (res.data.length === 1) {
+              this.props.navigation.navigate('Book', {
+                screen: 'RentABook',
+                params: {item: res.data[0], qrcode: true},
+              });
+            } else Alert.alert('Kayit bulunamadi!');
           });
-        } else Alert.alert('Kayit bulunamadi!');
-      });
+        } catch (er) {
+          Alert.alert('Kayit bulunamadi!');
+        }
+      }
     }
+  }
+  refreshPage() {
+    console.log('sayfa yenilendi');
+    window.location.reload(false);
   }
 
   onBarCodeRead(scanResult) {
@@ -94,15 +111,17 @@ class ProductScanRNCamera extends Component {
         <View style={[styles.overlay, styles.topOverlay]}>
           <Text style={styles.scanScreenMessage}>Please scan the barcode.</Text>
         </View>
-        <View style={[styles.overlay, styles.bottomOverlay]}>
-          <Button
-            onPress={() => {
-              console.log('scan clicked');
-            }}
-            style={styles.enterBarcodeManualButton}
-            title="Enter Barcode"
-          />
-        </View>
+        {
+          <View style={[styles.overlay, styles.bottomOverlay]}>
+            <Button
+              onPress={() => {
+                console.log('scan clicked');
+              }}
+              style={styles.enterBarcodeManualButton}
+              title="Enter Barcode"
+            />
+          </View>
+        }
       </View>
     );
   }

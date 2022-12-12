@@ -2,6 +2,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import {Text, SafeAreaView, View, Image} from 'react-native';
 import usePost from '../../hooks/usePost';
 import {AuthContext} from '../../context/AuthContext';
+import usePatch from '../../hooks/usePatch';
 
 import {BASE_URL} from '../../../config';
 import styles from './RentABook.style';
@@ -11,32 +12,36 @@ import {SetDatePicker} from './DatePicker';
 import DeliverBook from '../DeliverBook';
 
 const RentABook = ({route, navigation}) => {
-  const {item} = route.params;
+  const {item, qrcode} = route.params;
+
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
   const {userInfo, setCheckData, checkData, userData} = useContext(AuthContext);
   const [deliverVisible, setDeliverVisible] = useState(false);
 
   const {data, err, loading, info, post} = usePost();
+  const {patchData, patchErr, patchLoading, patchInfo, patch} = usePatch();
 
   function rentBook() {
     let postData = {
       bookId: item.kitapNo,
-      username: 'halil',
-      password: '1234',
+      username: userInfo.username,
+      password: userInfo.password,
       date: date,
     };
     post(BASE_URL + '/api/rentbook', postData, navigation);
+    setCheckData(!checkData); // kullanici datalarini yeniden kontrol etmek icin tetikleme
+  }
+  function deliver(bookId, bookcaseId) {
+    let patchData = {
+      bookId: bookId,
+      bookcaseId: bookcaseId,
+      userId: userInfo.userId,
+    };
+    patch(BASE_URL + '/api/rentbook', patchData, navigation);
     setCheckData(!checkData);
   }
-  function hdeliverBook() {
-    let usePatch = {
-      bookId: item.kitapNo,
-      username: 'halil',
-      password: '1234',
-      date: date,
-    };
-  }
+  //kitabin durumunu kontrol etme
   useEffect(() => {
     let filterBook = userData
       .filter(book => book.kitapNo === item.kitapNo)
@@ -59,7 +64,13 @@ const RentABook = ({route, navigation}) => {
         </View>
       </View>
       {deliverVisible ? (
-        <DeliverBook></DeliverBook>
+        <DeliverBook
+          deliver={deliver}
+          navigation={navigation}
+          item={item}
+          route={route}
+          qrcode={qrcode ? true : false}
+        />
       ) : (
         <>
           <View style={styles.dateContainer}>
@@ -72,6 +83,7 @@ const RentABook = ({route, navigation}) => {
               open={open}
               setDate={setDate}
               setOpen={setOpen}
+              patchErr={patchErr}
             />
           </View>
           <View style={styles.buttonContainer}>

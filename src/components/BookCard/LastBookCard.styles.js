@@ -10,7 +10,7 @@ export default StyleSheet.create({
     height: 210,
   },
   bookItemTitle: {
-    marginTop: 160,
+    marginTop: 162,
     height: 30,
     fontSize: 11,
     color: 'white',

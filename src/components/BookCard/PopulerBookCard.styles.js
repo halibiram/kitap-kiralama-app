@@ -15,7 +15,7 @@ export default StyleSheet.create({
     borderRadius: 12,
   },
   bookItemTitle: {
-    marginTop: 210,
+    marginTop: 211,
     height: 30,
     fontFamily: 'Poppins-Regular',
     fontSize: 9,
@@ -30,6 +30,7 @@ export default StyleSheet.create({
     padding: 3,
 
     color: 'white',
+    marginBottom: -15,
 
     backgroundColor: '#0D253Cf6',
     paddingHorizontal: 5,

@@ -124,6 +124,25 @@ const Details = ({route, navigation}) => {
             </View>
           </View>
         )}
+
+        {
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('Book', {
+                screen: 'BookLocation',
+                params: {item: item},
+              })
+            }
+            style={[
+              styles.buttonWrapper,
+              {backgroundColor: 'green'},
+              !detailActive && {marginTop: 100},
+            ]}>
+            <Text style={styles.buttonTitle}>
+              {detailActive ? 'Nerede Olmali?' : 'Kitap Nerede?'}
+            </Text>
+          </TouchableOpacity>
+        }
         {detailActive && (
           <TouchableOpacity
             onPress={() =>
@@ -136,7 +155,7 @@ const Details = ({route, navigation}) => {
             <Text style={styles.buttonTitle}>Teslim Et</Text>
           </TouchableOpacity>
         )}
-        {!detailActive && userInfo && (
+        {detailActive && (
           <TouchableOpacity
             onPress={() =>
               navigation.navigate('Book', {
@@ -144,7 +163,7 @@ const Details = ({route, navigation}) => {
                 params: {item: item},
               })
             }
-            style={[styles.buttonWrapper, {backgroundColor: 'green'}]}>
+            style={styles.buttonWrapper}>
             <Text style={styles.buttonTitle}>Kirala</Text>
           </TouchableOpacity>
         )}
@@ -171,7 +190,7 @@ const styles = StyleSheet.create({
   desciptionWrapper: {
     backgroundColor: 'white',
 
-    marginTop: -25,
+    marginTop: -40,
     height: 400,
     borderTopRightRadius: 30,
     borderTopLeftRadius: 30,
