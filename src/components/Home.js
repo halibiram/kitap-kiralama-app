@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {
   Text,
   StyleSheet,
@@ -15,12 +15,13 @@ import useFetch from '../hooks/useFetch';
 import colors from '../assets/colors/colors';
 import {BASE_URL} from '../../config';
 import BookCard from './BookCard';
+import {AuthContext} from '../context/AuthContext';
 
 Feather.loadFont();
 
 const Home = ({navigation}) => {
   const {data: populerBook, err, loading} = useFetch(BASE_URL + '/api/book');
-
+  const {userInfo} = useContext(AuthContext);
   const {data: lastBooks} = useFetch(BASE_URL + '/api/book?last=last');
 
   return (
@@ -34,7 +35,11 @@ const Home = ({navigation}) => {
         <SafeAreaView>
           <View style={styles.headerWrapper}>
             <Image
-              source={require('../assets/images/pImages.jpg')}
+              source={
+                userInfo.picture
+                  ? {uri: BASE_URL + '/api/userPhoto/' + userInfo.picture}
+                  : require('../assets/images/profil.jpg')
+              }
               style={styles.profileImage}
             />
             <Feather name="menu" size={24} color={colors.textDark} />
@@ -42,7 +47,8 @@ const Home = ({navigation}) => {
         </SafeAreaView>
 
         {/*Search Area */}
-        <TouchableNativeFeedback onPress={() => navigation.navigate('Book')}>
+        <TouchableNativeFeedback
+          onPress={() => navigation.navigate('Book', {screen: 'Search'})}>
           <View style={styles.searchWrapper}>
             <Feather name="search" size={24} color={colors.textDark} />
 

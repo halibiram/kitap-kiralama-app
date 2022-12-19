@@ -54,9 +54,7 @@ export const AuthProvider = ({children}) => {
           picture: res.data.kulResim,
         });
         setErrorMessage(null); //Basari giriste hata mesajini sifirlamak icin
-        Alert.alert('Hos Geldin!', res.data.adi, [
-          {text: 'Hos bulduk', onPress: () => setSuccessLogin(true)},
-        ]);
+
         AsyncStorage.setItem(
           'user',
           JSON.stringify({
@@ -69,7 +67,11 @@ export const AuthProvider = ({children}) => {
             picture: res.data.kulResim,
           }),
         )
-          .then(json => console.log('basariyla veri kayit edildi'))
+          .then(json => {
+            console.log('basariyla veri kayit edildi');
+            setSuccessLogin(true);
+            setIsloading(false);
+          })
           .catch(err =>
             console.log('veri kayit edilirken hata olustu **' + err),
           );

@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 
-import Background from '../assets/loginScreen/Background';
+import Background from './loginScreen/Background';
 
-import SingupPage from '../assets/loginScreen/singupPage';
+import SingupPage from './loginScreen/singupPage';
 const Singup = () => {
   return (
     <Background>

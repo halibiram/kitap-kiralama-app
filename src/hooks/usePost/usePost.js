@@ -13,7 +13,7 @@ function usePost() {
       const {data: responseData} = await axios.post(url, apiData);
       responseData[0].statusCode &&
         Alert.alert('Bilgi', responseData[0].statusCode, [
-          {onPress: () => navigation.goBack()},
+          !navigation && {onPress: () => navigation.goBack()},
         ]);
       setData(responseData);
       setLoading(false);

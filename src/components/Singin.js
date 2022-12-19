@@ -1,10 +1,10 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {View, StyleSheet, Text, TouchableOpacity, Alert} from 'react-native';
 
-import Background from '../assets/loginScreen/Background';
-import Btn from '../assets/loginScreen/Btn';
-import {darkGreen, green} from '../assets/loginScreen/Colors';
-import Field from '../assets/loginScreen/Field';
+import Background from './loginScreen/Background';
+import Btn from './loginScreen/Btn';
+import {darkGreen, green} from './loginScreen/Colors';
+import Field from './loginScreen/Field';
 
 import {AuthContext} from '../context/AuthContext';
 

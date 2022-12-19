@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {style} from 'deprecated-react-native-prop-types/DeprecatedImagePropType';
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   Text,
   View,
@@ -16,6 +16,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import colors from '../assets/colors/colors';
 import {BASE_URL} from '../../config';
 import {useNavigation} from '@react-navigation/native';
+import {AuthContext} from '../context/AuthContext';
 
 const Search = () => {
   const [query, setQuery] = useState('');
@@ -25,6 +26,7 @@ const Search = () => {
   const [error, setError] = useState(null);
   const [url, setUrl] = useState(BASE_URL + '/api/?search=' + null);
   const navigation = useNavigation();
+  const {userInfo} = useContext(AuthContext);
   //kitap ve yazar arama -- query degistiginde tetiklenecek
   useEffect(() => {
     setIsloading(true);
@@ -78,7 +80,11 @@ const Search = () => {
       <SafeAreaView>
         <View style={styles.headerWrapper}>
           <Image
-            source={require('../assets/images/pImages.jpg')}
+            source={
+              userInfo.picture
+                ? {uri: BASE_URL + '/api/userPhoto/' + userInfo.picture}
+                : require('../assets/images/profil.jpg')
+            }
             style={styles.profileImage}
           />
           <Feather name="menu" size={24} color={colors.textDark} />

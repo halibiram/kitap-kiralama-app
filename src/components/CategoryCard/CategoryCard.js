@@ -1,9 +1,6 @@
 import React, {useState} from 'react';
 import {Image, View, TouchableOpacity, Text, FlatList} from 'react-native';
 import styles from './CategoryCard.style';
-//import CategoryCardList from '../CategoryCardList';
-import useFetch from '../../hooks/useFetch';
-import {BASE_URL} from '../../../config';
 
 const CategoryCard = (item, navigation) => {
   return (

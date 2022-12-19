@@ -1,9 +1,9 @@
 import {style} from 'deprecated-react-native-prop-types/DeprecatedTextPropTypes';
 import React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
-import Background from '../assets/loginScreen/Background';
-import Btn from '../assets/loginScreen/Btn';
-import {darkGreen, green} from '../assets/loginScreen/Colors';
+import Background from './loginScreen/Background';
+import Btn from './loginScreen/Btn';
+import {darkGreen, green} from './loginScreen/Colors';
 import {useNavigation} from '@react-navigation/native';
 const Login = () => {
   const navigation = useNavigation();
