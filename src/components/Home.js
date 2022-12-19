@@ -36,7 +36,7 @@ const Home = ({navigation}) => {
           <View style={styles.headerWrapper}>
             <Image
               source={
-                userInfo.picture
+                userInfo && userInfo.picture
                   ? {uri: BASE_URL + '/api/userPhoto/' + userInfo.picture}
                   : require('../assets/images/profil.jpg')
               }

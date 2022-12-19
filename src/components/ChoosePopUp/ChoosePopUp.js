@@ -1,5 +1,5 @@
 import {Text, View, Modal, Dimensions, TouchableOpacity} from 'react-native';
-import {styles} from './ChosePopUp.style';
+import {styles} from './ChoosePopUp.style';
 import Btn from '../loginScreen/Btn';
 
 export default ChosePhotoType = ({

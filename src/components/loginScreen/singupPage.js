@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useReducer, useState} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 
 import Btn from './Btn';

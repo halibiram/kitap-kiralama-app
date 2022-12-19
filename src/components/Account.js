@@ -16,7 +16,7 @@ import Login from './Login';
 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import BookCard from './BookCard';
-import ChosePopUp from './ChosePopUp';
+import ChoosePopUp from './ChoosePopUp';
 
 import {BASE_URL} from '../../config';
 import axios from 'axios';
@@ -270,7 +270,7 @@ const Account = ({navigation}) => {
           </View>
         </ScrollView>
         <View style={{}}>
-          <ChosePopUp
+          <ChoosePopUp
             visible={popUpVisible}
             setVisible={setPopUpVisible}
             capturePhoto={captureImage}
